@@ -1,0 +1,15 @@
+
+<div class="display-data" *ngIf="ctx">
+  <div [style.color]="getColor(true)">{{score0}}</div>
+  <div style="flex-grow: 1"></div>
+  <div>{{ctx.displayData.timeLeft}}</div>
+  <div style="flex-grow: 1"></div>
+  <div [style.color]="getColor(false)">{{score1}}</div>
+</div>
+
+<div class="footnote">dino sprites by <a href="https://twitter.com/ScissorMarks">ScissorMarks</a></div>
+
+<div class="full-center">
+  <div class="net"></div>
+  <canvas #canvas class="field" width="800" height="400"></canvas>
+</div>

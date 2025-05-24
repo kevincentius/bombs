@@ -1,0 +1,26 @@
+
+.net {
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: #faa;
+}
+
+.display-data {
+  position: absolute;
+  width: 100%;
+  display: flex;
+
+}
+
+.footnote {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8em;
+  color: #ccc;
+}

@@ -16,7 +16,7 @@ export class GameContext {
     width: 800,
     height: 400,
     
-    roundTime: 45,
+    roundTime: 15,
 
     kickPower: 8,
 

@@ -1,4 +1,5 @@
 import { Assets, Rectangle, Texture } from "pixi.js";
+import {Howl, Howler} from 'howler';
 
 export class TextureStore {
   players!: Texture[];
@@ -7,6 +8,22 @@ export class TextureStore {
   smallExplosion!: Texture[];
   tile!: Texture;
   tileActive!: Texture;
+
+  explosionSounds: Howl[] = [
+    new Howl({ src: ['explosion.wav'] }),
+    new Howl({ src: ['explosion.wav'], rate: 1.25 }),
+    new Howl({ src: ['explosion.wav'], rate: 1.1 }),
+    new Howl({ src: ['explosion.wav'], rate: 0.9 }),
+    new Howl({ src: ['explosion.wav'], rate: 0.8 }),
+  ];
+
+  kickSounds: Howl[] = [
+    new Howl({ src: ['kick.mp3'] }),
+    new Howl({ src: ['kick.mp3'], rate: 1.25 }),
+    new Howl({ src: ['kick.mp3'], rate: 1.1 }),
+    new Howl({ src: ['kick.mp3'], rate: 0.9 }),
+    new Howl({ src: ['kick.mp3'], rate: 0.8 }),
+  ];
 
   async init() {
     this.players = await Promise.all([

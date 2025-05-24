@@ -48,6 +48,8 @@ export class FieldPixi {
         this.tileContainer.addChild(tile.container);
       }
     }
+
+    this.spawnBomb();
   }
 
   createPlayers() {
@@ -103,11 +105,11 @@ export class FieldPixi {
   update() {
     this.updatePlayers();
 
-    this.spawnBomb();
+    this.updateBombSpawner();
     this.updateBombs();
     this.updateTiles();
 
-    if (this.players.length === 0 || this.ctx.displayData.timeLeft <= 0) {
+    if (this.players.length === 0) {
       this.ctx.gamePixi.game.gameOver();
     }
   }
@@ -119,19 +121,24 @@ export class FieldPixi {
     });
   }
 
-  spawnBomb() {
+  updateBombSpawner() {
+    if (this.ctx.displayData.timeLeft <= 0) return; // no bombs if time is up
+
     this.spawnInterval = this.ctx.displayData.timeLeft / this.gameRule.roundTime * (this.gameRule.bombSpawnIntervalInitial - this.gameRule.bombSpawnIntervalFinal) + this.gameRule.bombSpawnIntervalFinal;
     this.spawnCounter++;
     if (this.spawnCounter >= this.spawnInterval) {
       this.spawnCounter -= this.spawnInterval;
 
-      // spawn a new bomb at a random position
-      const x = Math.random() * 800; // assuming field width is 800
-      const y = Math.random() * 400; // assuming field height is 400
-      const bomb = this.ctx.newBomb({ x, y });
-      this.bombs.push(bomb);
-      this.bombContainer.addChild(bomb.container);
+      this.spawnBomb();
     }
+  }
+
+  private spawnBomb() {
+    const x = Math.random() * 800; // assuming field width is 800
+    const y = Math.random() * 400; // assuming field height is 400
+    const bomb = this.ctx.newBomb({ x, y });
+    this.bombs.push(bomb);
+    this.bombContainer.addChild(bomb.container);
   }
 
   updateBombs() {
@@ -139,6 +146,9 @@ export class FieldPixi {
     this.bombs = this.bombs.filter(bomb => {
       const exploded = bomb.update();
       if (exploded) {
+        this.textureStore.explosionSounds[
+          Math.floor(Math.random() * this.textureStore.explosionSounds.length)
+        ].play(); // play explosion sound
         this.createExplosion(bomb.pos);
 
         this.players = this.players.filter(player => {
@@ -213,7 +223,7 @@ export class FieldPixi {
     });
     movie.position.set(pos.x, pos.y);
     movie.anchor.set(0.5, 0.8);
-    movie.animationSpeed = 0.5;
+    movie.animationSpeed = 0.3;
     movie.play();
     movie.loop = false;
     movie.onComplete = () => movie.destroy();
@@ -239,11 +249,11 @@ export class FieldPixi {
     this.playerContainer.addChild(player.container);
     
     player.subjKick.subscribe(() => {
-      this.kickBomb({x: player.x, y: player.y}, player.team);
+      this.checkKickBomb({x: player.x, y: player.y}, player.team);
     });
   }
 
-  kickBomb(playerPos: Pos, team: number) {
+  checkKickBomb(playerPos: Pos, team: number) {
     // find bombs
     const hits = this.bombs
       .filter(bomb => bomb.time >= bomb.config.spawnTime)
@@ -262,6 +272,7 @@ export class FieldPixi {
       hit.bomb.dir = Math.atan2(hit.dy, hit.dx);
       hit.bomb.kicked();
       
+      this.ctx.textureStore.kickSounds[Math.floor(Math.random() * this.ctx.textureStore.kickSounds.length)].play(); // play kick sound
       this.createSmallExplosion(hit.bomb.pos);
 
       // const xpd = hit.dy / hit.dist;

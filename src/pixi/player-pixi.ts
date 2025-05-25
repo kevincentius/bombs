@@ -26,6 +26,9 @@ export class PlayerPixi {
   speed = 2.5;
   radius = 20;
 
+  repairCounter = 0;
+  respawnCounter = 0;
+
   subjKick = new Subject<void>();
 
   constructor(
@@ -72,6 +75,13 @@ export class PlayerPixi {
 
     // kick cooldown
     this.kickCooldown = Math.max(0, this.kickCooldown - 1);
+
+    // repair
+    if (dx == 0 && dy == 0) {
+      this.repairCounter++;
+    } else {
+      this.repairCounter = 0;
+    }
 
     this.sprite.position.set(this.x, this.y);
 

@@ -79,6 +79,10 @@ export class BombPixi {
     this.sprite.position.set(this.pos.x + shakeX, this.pos.y + shakeY + spawnTfY);
     this.sprite.alpha = spawnP;
 
+
+    const tintC = 0xff * (1 - p*p*p);
+    this.sprite.tint = (tintC << 16) | (tintC << 8) | tintC; // grayscale tint
+
     this.time++;
     if (this.time > this.config.spawnTime + this.config.explosionDelay) {
       this.container.destroy();

@@ -24,11 +24,22 @@ export class TilePixi {
   }
 
   takeHit() {
-    this.sprite.destroy();
+    if (!this.alive) return;
     this.alive = false;
+    this.updateSprite();
+  }
+
+  repair() {
+    if (this.alive) return;
+    this.alive = true;
+    this.updateSprite();
   }
 
   setActive(active: boolean) {
     this.sprite.texture = active ? this.textureStore.tileActive : this.textureStore.tile;
+  }
+
+  updateSprite() {
+    this.sprite.alpha = this.alive ? 1 : 0.3;
   }
 }

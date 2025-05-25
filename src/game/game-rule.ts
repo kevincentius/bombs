@@ -4,6 +4,7 @@ export interface GameRule {
   height: number;
   roundTime: number;
   kickPower: number;
+  repairTime: number;
 
   bombSpawnIntervalInitial: number;
   bombSpawnIntervalFinal: number;

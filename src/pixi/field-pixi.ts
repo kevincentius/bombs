@@ -53,8 +53,8 @@ export class FieldPixi {
   }
 
   createPlayers() {
-    const boundaryLeft = { xMin: 0, xMax: 400, yMin: 0, yMax: 400 };
-    const boundaryRight = { xMin: 400, xMax: 800, yMin: 0, yMax: 400 };
+    const boundaryLeft = { xMin: 0, xMax: 450, yMin: 0, yMax: 400 };
+    const boundaryRight = { xMin: 350, xMax: 800, yMin: 0, yMax: 400 };
 
     const p1Settings: PlayerSettings = {
       controls: {
@@ -181,23 +181,29 @@ export class FieldPixi {
 
     // players are marked as safe if they stand on a tile
     const unsafePlayers = new Set(this.players);
-    let count = 0;
     let scoreMap = new Map<number, number>();
     scoreMap.set(-1, 0);
     scoreMap.set(1, 0);
 
     for (const row of this.tiles) {
       for (const tile of row) {
-        if (!tile.alive) continue; // skip destroyed tiles
-        const team = tile.pos.x < 400 ? -1 : 1;
-        scoreMap.set(team, (scoreMap.get(team)!) + 1); // count tiles per team
+        if (tile.alive) {
+          const team = tile.pos.x < 400 ? -1 : 1;
+          scoreMap.set(team, (scoreMap.get(team)!) + 1); // count tiles per team
+        }
 
-        for (const player of this.players) {
-          const dist = Math.hypot(player.x - tile.pos.x, player.y - tile.pos.y);
-          if (dist < player.radius + this.gameRule.tiles.size / 2) {
+        const hitPlayers = this.players.filter(player => Math.hypot(player.x - tile.pos.x, player.y - tile.pos.y) < player.radius + this.gameRule.tiles.size / 2);
+
+        if (hitPlayers.find(player => player.repairCounter >= this.gameRule.repairTime)) {
+          tile.repair();
+        }
+
+        if (hitPlayers.length > 0) {
+          for (const player of hitPlayers) {
             tile.setActive(true); // activate tile if player is close
-            unsafePlayers.delete(player); // player is safe on tile
-            count++;
+            if (tile.alive) {
+              unsafePlayers.delete(player); // player is safe on tile
+            }
           }
         }
       }

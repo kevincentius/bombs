@@ -16,14 +16,17 @@ export class GameContext {
     width: 800,
     height: 400,
     
-    roundTime: 180,
+    roundTime: 90,
 
     kickPower: 8,
-    repairTime: 90,
+    repairTime: 60,
+    repairTiles: 1,
+
+    respawnTime: 480,
 
     bombSpawnIntervalInitial: 120,
     bombSpawnIntervalFinal: 30,
-    bombKickExplosionDelay: 0,
+    bombKickExplosionDelay: 0 / (1000 / 60),
     
     tiles: {
       rows: 20,

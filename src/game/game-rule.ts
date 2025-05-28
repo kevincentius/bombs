@@ -5,6 +5,9 @@ export interface GameRule {
   roundTime: number;
   kickPower: number;
   repairTime: number;
+  repairTiles: number;
+
+  respawnTime: number; // if die
 
   bombSpawnIntervalInitial: number;
   bombSpawnIntervalFinal: number;

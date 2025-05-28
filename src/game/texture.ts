@@ -8,21 +8,23 @@ export class TextureStore {
   smallExplosion!: Texture[];
   tile!: Texture;
   tileActive!: Texture;
+  tileRepair!: Texture;
+  tileDestroyed!: Texture;
 
+  roundStartSound = new Howl({ src: ['round-start.mp3'] });
+  roundEndSound = new Howl({ src: ['round-end.mp3'] });
+  repairSound = new Howl({ src: ['repair.mp3'] });
+
+  bombSpawnSound = new Howl({ src: ['bomb-spawn.mp3'] });
   explosionSounds: Howl[] = [
-    new Howl({ src: ['explosion.wav'] }),
-    new Howl({ src: ['explosion.wav'], rate: 1.25 }),
-    new Howl({ src: ['explosion.wav'], rate: 1.1 }),
-    new Howl({ src: ['explosion.wav'], rate: 0.9 }),
-    new Howl({ src: ['explosion.wav'], rate: 0.8 }),
+    new Howl({ src: ['explosion0.mp3']}),
+    new Howl({ src: ['explosion1.mp3']}),
   ];
 
   kickSounds: Howl[] = [
-    new Howl({ src: ['kick.mp3'] }),
-    new Howl({ src: ['kick.mp3'], rate: 1.25 }),
-    new Howl({ src: ['kick.mp3'], rate: 1.1 }),
-    new Howl({ src: ['kick.mp3'], rate: 0.9 }),
-    new Howl({ src: ['kick.mp3'], rate: 0.8 }),
+    new Howl({ src: ['kick0.mp3']}),
+    new Howl({ src: ['kick1.mp3']}),
+    new Howl({ src: ['kick2.mp3']}),
   ];
 
   async init() {
@@ -37,6 +39,8 @@ export class TextureStore {
     this.bomb.source.scaleMode = 'nearest';
     this.tile = await Assets.load('tile.png');
     this.tileActive = await Assets.load('tile-active.png');
+    this.tileRepair = await Assets.load('tile-repair.png');
+    this.tileDestroyed = await Assets.load('tile-destroyed.png');
     
     // 1x12 sprite sheet for the explosion:
     const explosionSheet = await Assets.load('explosion.png');

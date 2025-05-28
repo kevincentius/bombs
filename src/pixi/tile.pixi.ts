@@ -9,6 +9,7 @@ export class TilePixi {
 
   // state
   alive = true;
+  active = false;
 
   constructor(
     private textureStore: TextureStore,
@@ -36,10 +37,14 @@ export class TilePixi {
   }
 
   setActive(active: boolean) {
-    this.sprite.texture = active ? this.textureStore.tileActive : this.textureStore.tile;
+    this.active = active;
+    this.updateSprite();
   }
 
   updateSprite() {
-    this.sprite.alpha = this.alive ? 1 : 0.3;
+    // this.sprite.alpha = this.alive ? 1 : 0.3;
+    this.sprite.texture = this.alive
+      ? (this.active ? this.textureStore.tileActive : this.textureStore.tile)
+      : (this.active ? this.textureStore.tileRepair : this.textureStore.tileDestroyed);
   }
 }

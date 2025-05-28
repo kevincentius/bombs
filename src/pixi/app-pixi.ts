@@ -19,7 +19,7 @@ export class AppPixi {
 
   async init() {
     await this.app.init({
-      background: '#1099bb',
+      background: '#000000',
       canvas: this.canvas,
       width: 800,
       height: 400,

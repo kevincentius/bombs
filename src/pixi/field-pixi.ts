@@ -28,7 +28,9 @@ export class FieldPixi {
     private gameRule: GameRule,
     private textureStore: TextureStore,
   ) {
+    this.spawnCounter = Math.max(60, this.gameRule.bombSpawnIntervalInitial / 2);
     this.createExplosion({ x: 400, y: 200});
+
     this.container.sortableChildren = true; // enable sorting for z-index management
     
     this.container.addChild(this.tileContainer);
@@ -48,8 +50,6 @@ export class FieldPixi {
         this.tileContainer.addChild(tile.container);
       }
     }
-
-    this.spawnBomb();
   }
 
   createPlayers() {
@@ -98,8 +98,8 @@ export class FieldPixi {
     
     this.addPlayer(this.ctx.newPlayer(this.textureStore.players[0], boundaryLeft, p1Settings, -1));
     this.addPlayer(this.ctx.newPlayer(this.textureStore.players[1], boundaryRight, p2Settings, 1));
-    this.addPlayer(this.ctx.newPlayer(this.textureStore.players[2], boundaryLeft, p3Settings, -1));
-    this.addPlayer(this.ctx.newPlayer(this.textureStore.players[3], boundaryRight, p4Settings, 1));
+    // this.addPlayer(this.ctx.newPlayer(this.textureStore.players[2], boundaryLeft, p3Settings, -1));
+    // this.addPlayer(this.ctx.newPlayer(this.textureStore.players[3], boundaryRight, p4Settings, 1));
   }
 
   update() {
@@ -139,6 +139,8 @@ export class FieldPixi {
     const bomb = this.ctx.newBomb({ x, y });
     this.bombs.push(bomb);
     this.bombContainer.addChild(bomb.container);
+    
+    this.textureStore.bombSpawnSound.play(); // play bomb spawn sound
   }
 
   updateBombs() {
@@ -151,13 +153,11 @@ export class FieldPixi {
         ].play(); // play explosion sound
         this.createExplosion(bomb.pos);
 
-        this.players = this.players.filter(player => {
-          const dist = Math.hypot(player.x - bomb.pos.x, player.y - bomb.pos.y);
+        this.getAlivePlayers().forEach(player => {
+          const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
           if (dist < player.radius + 20) {
-            player.container.destroy();
-            return false;
+            player.die();
           }
-          return true;
         });
 
         // destroy tiles
@@ -177,14 +177,19 @@ export class FieldPixi {
   }
 
   updateTiles() {
+    const players = this.getAlivePlayers();
+
     this.tiles.flat().forEach(tile => tile.setActive(false));
 
     // players are marked as safe if they stand on a tile
-    const unsafePlayers = new Set(this.players);
+    const unsafePlayers = new Set(players);
     let scoreMap = new Map<number, number>();
     scoreMap.set(-1, 0);
     scoreMap.set(1, 0);
 
+    // const playerTileCollisionMap = new Map<PlayerPixi, TilePixi[]>();
+
+    let playRepairSound = false;
     for (const row of this.tiles) {
       for (const tile of row) {
         if (tile.alive) {
@@ -192,10 +197,11 @@ export class FieldPixi {
           scoreMap.set(team, (scoreMap.get(team)!) + 1); // count tiles per team
         }
 
-        const hitPlayers = this.players.filter(player => Math.hypot(player.x - tile.pos.x, player.y - tile.pos.y) < player.radius + this.gameRule.tiles.size / 2);
+        const hitPlayers = players.filter(player => Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y) < player.radius + this.gameRule.tiles.size / 2);
 
-        if (hitPlayers.find(player => player.repairCounter >= this.gameRule.repairTime)) {
+        if (!tile.alive && hitPlayers.find(player => player.repairCounter >= this.gameRule.repairTime) && this.ctx.displayData.timeLeft > 0) {
           tile.repair();
+          playRepairSound = true;
         }
 
         if (hitPlayers.length > 0) {
@@ -208,19 +214,48 @@ export class FieldPixi {
         }
       }
     }
+    if (playRepairSound) {
+      this.ctx.textureStore.repairSound.play(); // play repair sound
+    }
 
     // kill unsafe players
+    // for (const player of unsafePlayers) {
+    //   // if player is not safe, destroy their container
+    //   player.die();
+    //   this.createSmallExplosion({ x: player.pos.x, y: player.pos.y }); // create small explosion at player position
+    // }
+
+    // undo unsafe players move
     for (const player of unsafePlayers) {
-      // if player is not safe, destroy their container
-      player.container.destroy();
-      this.players = this.players.filter(p => p !== player); // remove from players list
-      this.createSmallExplosion({ x: player.x, y: player.y }); // create small explosion at player position
+      player.pos.x = player.lastPos.x;
+      player.pos.y = player.lastPos.y;
     }
-    this.players = this.players.filter(p => !unsafePlayers.has(p));
 
     // update score
     this.ctx.displayData.teams[0].score = scoreMap.get(-1)!; // left team score
     this.ctx.displayData.teams[1].score = scoreMap.get(1)!; // right team score
+  }
+
+  computePlayerToTileCollisions() {
+    const hitMap = new Map<PlayerPixi, TilePixi[]>();
+    for (const row of this.tiles) {
+      for (const tile of row) {
+        for (const player of this.getAlivePlayers()) {
+          if (!player.isAlive()) return;
+
+          const dist = Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y);
+          if (dist < player.radius + this.gameRule.tiles.size / 2) {
+            hitMap.set(player, hitMap.get(player) || []);
+            hitMap.get(player)!.push(tile);
+          }
+        }
+      }
+    }
+    return hitMap;
+  }
+
+  private getAlivePlayers() {
+    return this.players.filter(player => player.isAlive());
   }
 
   createExplosion(pos: Pos) {
@@ -255,7 +290,7 @@ export class FieldPixi {
     this.playerContainer.addChild(player.container);
     
     player.subjKick.subscribe(() => {
-      this.checkKickBomb({x: player.x, y: player.y}, player.team);
+      this.checkKickBomb({x: player.pos.x, y: player.pos.y}, player.team);
     });
   }
 

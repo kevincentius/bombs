@@ -17,6 +17,7 @@ export class GamePixi {
   ) {
     this.field = this.ctx.newField();
     this.container.addChild(this.field.container);
+    this.textureStore.roundStartSound.play();
   }
 
   update() {
@@ -26,6 +27,10 @@ export class GamePixi {
     if (this.timeCounter >= 60) {
       this.timeCounter = 0;
       this.ctx.displayData.timeLeft--;
+
+      if (this.ctx.displayData.timeLeft == 0) {
+        this.textureStore.roundEndSound.play();
+      }
     }
 
 

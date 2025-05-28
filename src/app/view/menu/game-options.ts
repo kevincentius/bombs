@@ -48,6 +48,7 @@ export const gameOptions: GameOption[] = [
     ],
     defaultIndex: 1,
     applier: (gameRule, value) => { gameRule.extraBound = value; },
+    advanced: true,
   },
 
   {

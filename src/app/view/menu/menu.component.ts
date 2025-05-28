@@ -32,6 +32,9 @@ export class MenuComponent {
   
   gameOptionsJson = '';
 
+  showAcknowledgements = false;
+  showHowTo = false;
+
   constructor(
     private gameRuleService: GameRuleService,
     private router: Router,
@@ -51,5 +54,13 @@ export class MenuComponent {
 
   debug(e: any) {
     this.r.fourPlayers = e;
+  }
+
+  toggleAcknowledgements() {
+    this.showAcknowledgements = !this.showAcknowledgements;
+  }
+
+  toggleHowTo() {
+    this.showHowTo = !this.showHowTo;
   }
 }

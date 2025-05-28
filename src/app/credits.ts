@@ -66,5 +66,11 @@ export const credits: CreditsEntry[] = [
     url: 'https://freesound.org/s/420878',
     description: 'Digging, Ice, Hammer, A.wav by InspectorJ',
     license: 'Attribution 4.0',
+  },
+  {
+    name: 'miss sound',
+    url: 'https://freesound.org/s/394453',
+    description: 'Bamboo Swing, B9.wav by InspectorJ',
+    license: 'Attribution 4.0',
   }
 ];

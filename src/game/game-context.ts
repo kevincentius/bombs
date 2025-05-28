@@ -19,7 +19,7 @@ export class GameContext {
     roundTime: 90,
 
     kickPower: 8,
-    repairTime: 60,
+    repairTime: 20,
     repairTiles: 1,
 
     respawnTime: 480,
@@ -27,6 +27,8 @@ export class GameContext {
     bombSpawnIntervalInitial: 120,
     bombSpawnIntervalFinal: 30,
     bombKickExplosionDelay: 0 / (1000 / 60),
+
+    canFall: true,
     
     tiles: {
       rows: 20,

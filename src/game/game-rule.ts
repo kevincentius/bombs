@@ -13,6 +13,8 @@ export interface GameRule {
   bombSpawnIntervalFinal: number;
   bombKickExplosionDelay: number;
 
+  canFall: boolean;
+
   tiles: {
     rows: number;
     cols: number;

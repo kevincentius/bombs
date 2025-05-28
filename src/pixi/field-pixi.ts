@@ -156,7 +156,7 @@ export class FieldPixi {
         this.getAlivePlayers().forEach(player => {
           const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
           if (dist < player.radius + 20) {
-            player.die();
+            this.killPlayer(player);
           }
         });
 
@@ -165,6 +165,12 @@ export class FieldPixi {
       };
       return !exploded;
     });
+  }
+
+  private killPlayer(player: PlayerPixi) {
+    player.die();
+    this.textureStore.playerDieSound.play();
+    this.createSmallExplosion({ x: player.pos.x, y: player.pos.y });
   }
 
   private destroyTiles(pos: Pos, radius: number) {
@@ -180,55 +186,67 @@ export class FieldPixi {
     const players = this.getAlivePlayers();
 
     this.tiles.flat().forEach(tile => tile.setActive(false));
-
-    // players are marked as safe if they stand on a tile
-    const unsafePlayers = new Set(players);
+    
     let scoreMap = new Map<number, number>();
     scoreMap.set(-1, 0);
     scoreMap.set(1, 0);
+    this.tiles.flat().forEach(tile => {
+      const team = tile.pos.x < 400 ? -1 : 1;;
+      if (tile.alive) {
+        scoreMap.set(team, (scoreMap.get(team) || 0) + 1);
+      }
+    });
 
-    // const playerTileCollisionMap = new Map<PlayerPixi, TilePixi[]>();
+    const playerTileCollisionMap = new Map<PlayerPixi, TilePixi[]>();
+    this.tiles.flat().forEach(tile => {
+      const hitPlayers = players.filter(player => Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y) < player.radius + this.gameRule.tiles.size / 2);
+      hitPlayers.forEach(player => {
+        playerTileCollisionMap.set(player, playerTileCollisionMap.get(player) || []);
+        playerTileCollisionMap.get(player)!.push(tile);
+        tile.setActive(true);
+      });
+    });
 
-    let playRepairSound = false;
-    for (const row of this.tiles) {
-      for (const tile of row) {
-        if (tile.alive) {
-          const team = tile.pos.x < 400 ? -1 : 1;
-          scoreMap.set(team, (scoreMap.get(team)!) + 1); // count tiles per team
-        }
-
-        const hitPlayers = players.filter(player => Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y) < player.radius + this.gameRule.tiles.size / 2);
-
-        if (!tile.alive && hitPlayers.find(player => player.repairCounter >= this.gameRule.repairTime) && this.ctx.displayData.timeLeft > 0) {
-          tile.repair();
-          playRepairSound = true;
-        }
-
-        if (hitPlayers.length > 0) {
-          for (const player of hitPlayers) {
-            tile.setActive(true); // activate tile if player is close
-            if (tile.alive) {
-              unsafePlayers.delete(player); // player is safe on tile
-            }
+    // repair mechanic
+    if (this.ctx.displayData.timeLeft > 0) {
+      for (const player of players.filter(p => p.repairCounter >= this.gameRule.repairTime)) {
+        const repairableTiles = (playerTileCollisionMap.get(player) || [])
+          .filter(tile => !tile.alive);
+        if (repairableTiles.length === 0) continue;
+  
+        console.log(repairableTiles.length);
+  
+        // find closest tile
+        let closestTile = repairableTiles[0];
+        let closestDist = Math.hypot(player.pos.x - closestTile.pos.x, player.pos.y - closestTile.pos.y);
+        for (const tile of repairableTiles) {
+          const dist = Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y);
+          if (dist < closestDist) {
+            closestTile = tile;
+            closestDist = dist;
           }
         }
+        closestTile.repair();
+        this.textureStore.repairSound.play();
+        player.repairCounter = 0;
+        this.createSmallExplosion({ x: closestTile.pos.x, y: closestTile.pos.y });
       }
     }
-    if (playRepairSound) {
-      this.ctx.textureStore.repairSound.play(); // play repair sound
-    }
 
-    // kill unsafe players
-    // for (const player of unsafePlayers) {
-    //   // if player is not safe, destroy their container
-    //   player.die();
-    //   this.createSmallExplosion({ x: player.pos.x, y: player.pos.y }); // create small explosion at player position
-    // }
-
-    // undo unsafe players move
+    // detect players that are not on any safe tiles (fall / undo move)
+    const unsafePlayers = new Set<PlayerPixi>(players);
+    playerTileCollisionMap.forEach((tiles, player) => {
+      if (tiles.find(tile => tile.alive)) {
+        unsafePlayers.delete(player); // player is safe on tile
+      }
+    });
     for (const player of unsafePlayers) {
-      player.pos.x = player.lastPos.x;
-      player.pos.y = player.lastPos.y;
+      if (this.gameRule.canFall) {
+          this.killPlayer(player);
+      } else {
+        player.pos.x = player.lastPos.x;
+        player.pos.y = player.lastPos.y;
+      }
     }
 
     // update score
@@ -325,5 +343,9 @@ export class FieldPixi {
       // hit.bomb.speed = Math.hypot(vel.x, vel.y);
       // hit.bomb.dir = Math.atan2(vel.y, vel.x);
     });
+
+    if (hits.length == 0) {
+      this.ctx.textureStore.missSound.play();
+    }
   }
 }

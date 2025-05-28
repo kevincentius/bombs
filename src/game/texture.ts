@@ -15,16 +15,19 @@ export class TextureStore {
   roundEndSound = new Howl({ src: ['round-end.mp3'] });
   repairSound = new Howl({ src: ['repair.mp3'] });
 
-  bombSpawnSound = new Howl({ src: ['bomb-spawn.mp3'] });
+  playerDieSound = new Howl({ src: ['player-die.mp3'] });
+  missSound = new Howl({ src: ['miss.mp3'] });
+
+  bombSpawnSound = new Howl({ src: ['bomb-spawn.mp3'], volume: 0.5 });
   explosionSounds: Howl[] = [
-    new Howl({ src: ['explosion0.mp3']}),
-    new Howl({ src: ['explosion1.mp3']}),
+    new Howl({ src: ['explosion0.mp3'], volume: 0.25 }),
+    new Howl({ src: ['explosion1.mp3'], volume: 0.25 }),
   ];
 
   kickSounds: Howl[] = [
-    new Howl({ src: ['kick0.mp3']}),
-    new Howl({ src: ['kick1.mp3']}),
-    new Howl({ src: ['kick2.mp3']}),
+    new Howl({ src: ['kick0.mp3'], volume: 0.5 }),
+    new Howl({ src: ['kick1.mp3'], volume: 0.5 }),
+    new Howl({ src: ['kick2.mp3'], volume: 0.5 }),
   ];
 
   async init() {

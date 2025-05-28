@@ -1,6 +1,5 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import { GameContext } from "../game/game-context";
-import { TextureStore } from "../game/texture";
 import { PlayerSettings } from "../game/player-settings";
 import { InputHandler } from "../game/input-handler";
 import { InputKey } from "../game/types";
@@ -21,9 +20,7 @@ export class PlayerPixi {
   pos = {x: 0, y: 0};
   lastPos = {x: 0, y: 0};
   kickCooldown = 0;
-  kickCooldownMax = 60;
 
-  speed = 2.5;
   radius = 20;
 
   repairCounter = 0;
@@ -66,7 +63,7 @@ export class PlayerPixi {
       } else {
         this.sprite.alpha = Date.now() % 500 < 250 ? 0.5 : 0; // blink effect
       }
-      
+
       this.respawnCounterLeft--;
       this.repairCounter = 0;
     } else {
@@ -78,13 +75,14 @@ export class PlayerPixi {
     this.lastPos.y = this.pos.y;
     let dx = 0;
     let dy = 0;
-    if (this.inputHandler.isDown(this.settings.controls[InputKey.UP])) { dy -= this.speed; }
-    if (this.inputHandler.isDown(this.settings.controls[InputKey.DOWN])) { dy += this.speed; }
-    if (this.inputHandler.isDown(this.settings.controls[InputKey.LEFT])) { dx -= this.speed; }
-    if (this.inputHandler.isDown(this.settings.controls[InputKey.RIGHT])) { dx += this.speed; }
+    const speed = this.ctx.gameRule.playerSpeed;
+    if (this.inputHandler.isDown(this.settings.controls[InputKey.UP])) { dy -= speed; }
+    if (this.inputHandler.isDown(this.settings.controls[InputKey.DOWN])) { dy += speed; }
+    if (this.inputHandler.isDown(this.settings.controls[InputKey.LEFT])) { dx -= speed; }
+    if (this.inputHandler.isDown(this.settings.controls[InputKey.RIGHT])) { dx += speed; }
 
     if (this.isAlive() && this.inputHandler.isDown(this.settings.controls[InputKey.ACTION]) && this.kickCooldown <= 0) {
-      this.kickCooldown = this.kickCooldownMax;
+      this.kickCooldown = this.ctx.gameRule.kickCooldown;
       this.subjKick.next();
     }
 
@@ -110,7 +108,7 @@ export class PlayerPixi {
 
     this.sprite.position.set(this.pos.x, this.pos.y);
 
-    const p = this.kickCooldown / this.kickCooldownMax;
+    const p = this.kickCooldown / this.ctx.gameRule.kickCooldown;
     this.sprite.rotation = -this.team * p*p * Math.PI * 2;
   }
 }

@@ -53,8 +53,9 @@ export class FieldPixi {
   }
 
   createPlayers() {
-    const boundaryLeft = { xMin: 0, xMax: 450, yMin: 0, yMax: 400 };
-    const boundaryRight = { xMin: 350, xMax: 800, yMin: 0, yMax: 400 };
+    const extraBound = this.gameRule.extraBound;
+    const boundaryLeft = { xMin: 0, xMax: 400 + extraBound, yMin: 0, yMax: 400 };
+    const boundaryRight = { xMin: 400 - extraBound, xMax: 800, yMin: 0, yMax: 400 };
 
     const p1Settings: PlayerSettings = {
       controls: {
@@ -158,13 +159,13 @@ export class FieldPixi {
 
         this.getAlivePlayers().forEach(player => {
           const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
-          if (dist < player.radius + 20) {
+          if (dist < player.radius + bomb.config.explosionRadius) {
             this.killPlayer(player);
           }
         });
 
         // destroy tiles
-        this.destroyTiles(bomb.pos, bomb.config.radius);
+        this.destroyTiles(bomb.pos, bomb.config.tileDestroyRadius);
       };
       return !exploded;
     });
@@ -284,6 +285,7 @@ export class FieldPixi {
     movie.position.set(pos.x, pos.y);
     movie.anchor.set(0.5, 0.8);
     movie.animationSpeed = 0.3;
+    movie.scale = this.gameRule.bomb.explosionRadius / 20;
     movie.play();
     movie.loop = false;
     movie.onComplete = () => movie.destroy();

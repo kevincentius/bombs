@@ -32,19 +32,19 @@ export const credits: CreditsEntry[] = [
     license: 'Creative Commons 0',
   },
   {
-    name: 'laser sound',
+    name: 'kick sound',
     url: 'https://freesound.org/s/268344',
     description: 'JM_NOIZ_Laser 01.wav by Julien_Matthey',
     license: 'Creative Commons 0',
   },
   {
-    name: 'laser sound',
+    name: 'kick sound',
     url: 'https://freesound.org/s/750234',
     description: 'Blaster Shot by Universfield',
     license: 'Attribution 4.0',
   },
   {
-    name: 'laser sound',
+    name: 'kick sound',
     url: 'https://freesound.org/s/321101',
     description: 'laser2.wav by nsstudios',
     license: 'Attribution 4.0',

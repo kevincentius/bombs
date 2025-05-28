@@ -27,6 +27,43 @@ export const gameOptions: GameOption[] = [
   },
 
   {
+    caption: 'Player movement speed',
+    values: [
+      { label: 'Slow', value: 1.5 },
+      { label: 'Normal', value: 2.5 },
+      { label: 'Fast', value: 3.5 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.playerSpeed = value; },
+    advanced: true,
+  },
+
+  {
+    caption: 'Allow entering opponent field',
+    values: [
+      { label: 'No', value: 0 },
+      { label: 'A little', value: 50 },
+      { label: 'Half way', value: 200 },
+      { label: 'Freely', value: 400 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.extraBound = value; },
+  },
+
+  {
+    caption: 'Kick cooldown',
+    values: [
+      { label: 'Slow', value: 90 },
+      { label: 'Normal', value: 60 },
+      { label: 'Fast', value: 45 },
+      { label: 'Very Fast', value: 30 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.kickCooldown = value; },
+    advanced: true,
+  },
+
+  {
     caption: 'Repair speed',
     values: [
       { label: 'Fast', value: 14 },
@@ -78,9 +115,39 @@ export const gameOptions: GameOption[] = [
   {
     caption: 'Bomb time before explosion',
     values: [
-      { label: 'Short', value: 30 },
-      { label: 'Normal', value: 60 },
-      { label: 'Long', value: 90 },
-    ]
-  }
+      { label: 'Short', value: 3 },
+      { label: 'Normal', value: 4 },
+      { label: 'Long', value: 6.5 },
+      { label: 'Very Long', value: 10 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => gameRule.bomb.explosionDelay = value * 60,
+    advanced: true,
+  },
+
+  {
+    caption: 'Bomb explosion radius',
+    values: [
+      { label: 'Small', value: 20 },
+      { label: 'Normal', value: 30 },
+      { label: 'Big', value: 45 },
+      { label: 'Huge', value: 70 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.bomb.explosionRadius = value; },
+    advanced: true,
+  },
+
+  {
+    caption: 'Bomb tile destruction radius',
+    values: [
+      { label: 'Small', value: 20 },
+      { label: 'Normal', value: 30 },
+      { label: 'Big', value: 45 },
+      { label: 'Huge', value: 70 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.bomb.tileDestroyRadius = value; },
+    advanced: true,
+  },
 ];

@@ -13,14 +13,8 @@ export class BombPixi {
   speed = 0;
   dir = 0
 
-  config = {
-    spawnTime: 1000 / (1000 / 60),
-    explosionDelay: 4000 / (1000 / 60),
-    vMult: 0.99,
-    vDeccel: 0.01,
-    radius: 30,
-  };
-  
+  get config() { return this.gameRule.bomb; }
+
   constructor(
     private textureStore: TextureStore,
     private gameRule: GameRule,

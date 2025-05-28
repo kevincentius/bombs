@@ -3,7 +3,7 @@
   Dino Boom
 </h3>
 
-<fieldset class="text-unselectable game-settings-menu">
+<div class="text-unselectable game-settings-menu">
   <ng-container *ngIf="!useJson">
     <ng-container *ngFor="let gameOption of gameOptions; let i=index">
       <div class="input-row" *ngIf="!gameOption.advanced || showAdvanced">
@@ -73,7 +73,21 @@
   <div>
     <button style="font-size: 48px" (click)="onPlayClick()"> Start Game </button>
   </div>
-</fieldset>
+</div>
+
+<hr/><div style="height: 50px;"></div>
+
+<h3>
+  How to play
+</h3>
+<div>When the time runs out, the team with the most tiles left wins!</div>
+<div>Tip: stop near holes to start repairing.</div>
+<div>Player 1: WASD + Q</div>
+<div>Player 2: Arrow keys + Enter</div>
+<div>Player 3: IJKL + Space</div>
+<div>Player 4: Numpad 8456 + Numpad+ </div>
+
+<hr/><div style="height: 50px;"></div>
 
 <h3>
   Acknowledgements

@@ -63,7 +63,7 @@ export class FieldPixi {
         UP: 'w',
         LEFT: 'a',
         RIGHT: 'd',
-        ACTION: ' ',
+        ACTION: 'q',
       }
     };
     
@@ -83,7 +83,7 @@ export class FieldPixi {
         UP: 'i',
         LEFT: 'j',
         RIGHT: 'l',
-        ACTION: ';',
+        ACTION: ' ',
       }
     };
     

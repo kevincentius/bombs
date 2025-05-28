@@ -8,6 +8,12 @@ export interface CreditsEntry {
 
 export const credits: CreditsEntry[] = [
   {
+    name: 'dino sprites',
+    url: 'https://demching.itch.io/dino-family',
+    description: 'by ScissorMarks (https://twitter.com/ScissorMarks)',
+    license: 'Attribution 4.0',
+  },
+  {
     name: 'explosion sound',
     url: 'https://freesound.org/s/215595',
     description: 'bomb.mp3 by Taira Komori',

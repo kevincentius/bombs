@@ -98,8 +98,11 @@ export class FieldPixi {
     
     this.addPlayer(this.ctx.newPlayer(this.textureStore.players[0], boundaryLeft, p1Settings, -1));
     this.addPlayer(this.ctx.newPlayer(this.textureStore.players[1], boundaryRight, p2Settings, 1));
-    // this.addPlayer(this.ctx.newPlayer(this.textureStore.players[2], boundaryLeft, p3Settings, -1));
-    // this.addPlayer(this.ctx.newPlayer(this.textureStore.players[3], boundaryRight, p4Settings, 1));
+
+    if (this.gameRule.fourPlayers) {
+      this.addPlayer(this.ctx.newPlayer(this.textureStore.players[2], boundaryLeft, p3Settings, -1));
+      this.addPlayer(this.ctx.newPlayer(this.textureStore.players[3], boundaryRight, p4Settings, 1));
+    }
   }
 
   update() {
@@ -213,8 +216,6 @@ export class FieldPixi {
         const repairableTiles = (playerTileCollisionMap.get(player) || [])
           .filter(tile => !tile.alive);
         if (repairableTiles.length === 0) continue;
-  
-        console.log(repairableTiles.length);
   
         // find closest tile
         let closestTile = repairableTiles[0];

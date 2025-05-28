@@ -1,0 +1,18 @@
+
+.game-settings-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-row {
+  display: flex;
+
+  .input-caption {
+    width: 250px;
+  }
+
+  .input-value {
+    flex-grow: 1;
+  }
+}

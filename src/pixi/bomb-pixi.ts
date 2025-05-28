@@ -39,7 +39,6 @@ export class BombPixi {
 
   kicked() {
     this.time = Math.min(this.time, this.config.spawnTime + this.config.explosionDelay - this.gameRule.bombKickExplosionDelay);
-    console.log(this.time);
   }
 
   update() {

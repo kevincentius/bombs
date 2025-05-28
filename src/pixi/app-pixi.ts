@@ -30,8 +30,6 @@ export class AppPixi {
     this.game = this.ctx.newGame();
     this.container.addChild(this.game.container);
     
-    console.log('test');
-
     // Listen for animate update
     let lastUpdate = Date.now();
     const mspf = 17;

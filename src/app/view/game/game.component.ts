@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AppPixi } from '../../../pixi/app-pixi';
 import { GameContext } from '../../../game/game-context';
 import { CommonModule } from '@angular/common';
+import { GameRuleService } from '../../service/game-rule.service';
 
 @Component({
   selector: 'app-game',
@@ -27,11 +28,15 @@ export class GameComponent {
     }
   }
 
-  constructor() {
-    
+  constructor(
+    private gameRuleService: GameRuleService,
+  ) {
+    if (!this.gameRuleService.gameRule) {
+      window.location.href = '/';
+    }
   }
 
   async ngOnInit() {
-    this.ctx = new GameContext(this.canvas.nativeElement);
+    this.ctx = new GameContext(this.canvas.nativeElement, this.gameRuleService.gameRule!);
     await this.ctx.init();  }
 }

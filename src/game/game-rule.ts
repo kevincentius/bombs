@@ -20,4 +20,6 @@ export interface GameRule {
     cols: number;
     size: number;
   }
+
+  fourPlayers: boolean;
 }

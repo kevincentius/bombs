@@ -1,0 +1,95 @@
+
+<h3>
+  Menu
+</h3>
+
+<fieldset class="text-unselectable game-settings-menu">
+  <ng-container *ngIf="!useJson">
+    <ng-container *ngFor="let gameOption of gameOptions; let i=index">
+      <div class="input-row" *ngIf="!gameOption.advanced || showAdvanced">
+        <div class="input-caption">{{gameOption.caption}}</div>
+        <div class="input-value">
+          <label style="cursor: pointer;" *ngFor="let val of gameOption.values">
+            <input type="radio" name="autoInput{{i}}" [value]="val.value" [(ngModel)]="gameOption.value"/>
+            {{val.label}}
+          </label>
+        </div>
+      </div>  
+    </ng-container>
+
+    <div class="input-row">
+      <div class="input-caption"></div>
+      <div class="input-value">
+        <div>
+          <label style="cursor: pointer;">
+            <input type="checkbox" [(ngModel)]="r.canFall">
+            Can fall (die when falling into holes)
+          </label>
+        </div>
+      </div>
+    </div>
+  
+    <div class="input-row">
+      <div class="input-caption"></div>
+      <div class="input-value">
+        <label style="cursor: pointer;">
+          <input type="checkbox" [ngModel]="r.fourPlayers" (ngModelChange)="debug($event)">
+          Four players mode
+        </label>
+      </div>
+    </div>
+  </ng-container>
+  <div class="input-row" *ngIf="useJson">
+    <div class="input-caption">Game settings</div>
+    <div class="input-value">
+      <textarea style="width: 100%; height: 100px;" [(ngModel)]="gameOptionsJson"></textarea>
+    </div>
+  </div>
+  
+  <div class="input-row" *ngIf="showAdvanced">
+    <div class="input-caption"></div>
+    <div class="input-value">
+      <div>
+        <label style="cursor: pointer;">
+          <input type="checkbox" [(ngModel)]="useJson">
+          Use JSON settings
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-row">
+    <div class="input-caption"></div>
+    <div class="input-value">
+      <div>
+        <label style="cursor: pointer;">
+          <input type="checkbox" [(ngModel)]="showAdvanced">
+          Show advanced options
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <button style="font-size: 48px" (click)="onPlayClick()"> Start Game </button>
+  </div>
+</fieldset>
+
+<h3>
+  Acknowledgements
+</h3>
+
+<table border="1">
+  <tr>
+    <td>resource</td>
+    <td>origin</td>
+    <td>license</td>
+    <td>link</td>
+  </tr>
+  <tr *ngFor="let creditData of credits">
+    <td>{{creditData.name}}</td>
+    <td>{{creditData.description}}</td>
+    <td>{{creditData.license}}</td>
+    <td><a href="{{creditData.url}}">{{creditData.url}}</a></td>
+  </tr>
+</table>

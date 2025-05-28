@@ -12,45 +12,24 @@ import { TextureStore } from "./texture";
 import { Pos } from "./types";
 
 export class GameContext {
-  gameRule: GameRule = {
-    width: 800,
-    height: 400,
-    
-    roundTime: 90,
-
-    kickPower: 8,
-    repairTime: 20,
-    repairTiles: 1,
-
-    respawnTime: 480,
-
-    bombSpawnIntervalInitial: 120,
-    bombSpawnIntervalFinal: 30,
-    bombKickExplosionDelay: 0 / (1000 / 60),
-
-    canFall: true,
-    
-    tiles: {
-      rows: 20,
-      cols: 40,
-      size: 20,
-    }
-  };
-  displayData: DisplayData = {
-    teams: [
-      { score: 0 },
-      { score: 0 },
-    ],
-    timeLeft: this.gameRule.roundTime,
-  };
+  displayData: DisplayData;
   textureStore = new TextureStore();
   gamePixi: AppPixi;
   inputHandler = new InputHandler();
 
   constructor(
     private canvas: HTMLCanvasElement,
+    public gameRule: GameRule,
   ) {
     this.gamePixi = new AppPixi(this, this.canvas, this.textureStore);
+
+    this.displayData = {
+      teams: [
+        { score: 0 },
+        { score: 0 },
+      ],
+      timeLeft: this.gameRule.roundTime,
+    };
   }
 
   async init() {

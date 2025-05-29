@@ -101,6 +101,7 @@ export const gameOptions: GameOption[] = [
     ],
     defaultIndex: 1,
     applier: (gameRule, value) => { gameRule.player.kick.powerMult = value; },
+    advanced: true,
   },
 
   {

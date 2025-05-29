@@ -13,6 +13,7 @@ const defaultGameRule: GameRule = {
   kickCooldown: 60,
   kickChargeTime: 90,
   kickOverchargedIsWeaker: true,
+  kickChargePrecisionExp: 1,
   repairTime: 20,
   repairTiles: 1,
 

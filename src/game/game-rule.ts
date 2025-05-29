@@ -10,6 +10,7 @@ export interface GameRule {
   kickCooldown: number;
   kickChargeTime: number; // how long it takes to charge a full strength kick. 0 means instant (no power control)
   kickOverchargedIsWeaker: boolean;
+  kickChargePrecisionExp: number; // 1 = linear. Higher means more precision needed for a full charge.
 
   repairTime: number;
   repairTiles: number;

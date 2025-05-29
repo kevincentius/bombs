@@ -23,7 +23,7 @@ export const gameOptions: GameOption[] = [
       { label: '90s', value: 90 },
       { label: '150s', value: 120 },
     ],
-    defaultIndex: 2,
+    defaultIndex: 3,
     applier: (gameRule, value) => { gameRule.roundTime = value; }
   },
 
@@ -81,10 +81,12 @@ export const gameOptions: GameOption[] = [
         gameRule.kickChargeTime = 90;
         gameRule.kickPower = 12;
         gameRule.kickOverchargedIsWeaker = false;
+        gameRule.kickChargePrecisionExp = 1;
       } else if (value === 2){
         gameRule.kickChargeTime = 30;
         gameRule.kickPower = 10;
         gameRule.kickOverchargedIsWeaker = true;
+        gameRule.kickChargePrecisionExp = 3;
       }
     },
   },

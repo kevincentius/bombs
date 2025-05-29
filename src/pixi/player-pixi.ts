@@ -193,10 +193,15 @@ export class PlayerPixi {
     return isMoving;
   }
 
+  private getKickChargeValue() {
+    let p = this.getKickChargeValueRaw();
+    return Math.pow(p, this.ctx.gameRule.kickChargePrecisionExp);
+  }
+
   /**
    * if overcharged, it starts to decrease again to 25%
    */
-  private getKickChargeValue() {
+  private getKickChargeValueRaw() {
     if (this.kickChargeCounter <= 0) return 0;
 
     const max = this.ctx.gameRule.kickChargeTime;

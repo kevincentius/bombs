@@ -11,6 +11,8 @@ const defaultGameRule: GameRule = {
   playerSpeed: 2.5,
   kickPower: 8,
   kickCooldown: 60,
+  kickChargeTime: 90,
+  kickOverchargedIsWeaker: true,
   repairTime: 20,
   repairTiles: 1,
 
@@ -18,7 +20,7 @@ const defaultGameRule: GameRule = {
 
   bombSpawnIntervalInitial: 120,
   bombSpawnIntervalFinal: 30,
-  bombKickExplosionDelay: 0 / (1000 / 60),
+  resetBombTimerOnKick: 0, // 0 - 1
 
   bomb: {
     spawnTime: 1000 / (1000 / 60),

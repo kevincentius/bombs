@@ -311,12 +311,12 @@ export class FieldPixi {
     this.players.push(player);
     this.playerContainer.addChild(player.container);
     
-    player.subjKick.subscribe(() => {
-      this.checkKickBomb({x: player.pos.x, y: player.pos.y}, player.team);
+    player.subjKick.subscribe(kickPower => {
+      this.checkKickBomb({x: player.pos.x, y: player.pos.y}, kickPower);
     });
   }
 
-  checkKickBomb(playerPos: Pos, team: number) {
+  checkKickBomb(playerPos: Pos, kickPower: number) {
     // find bombs
     const hits = this.bombs
       .filter(bomb => bomb.time >= bomb.config.spawnTime)
@@ -331,11 +331,18 @@ export class FieldPixi {
 
     const power = 0.5 + 0.5 / hits.length;
     hits.forEach(hit => {
-      hit.bomb.speed = this.gameRule.kickPower;
+      hit.bomb.speed = kickPower;
       hit.bomb.dir = Math.atan2(hit.dy, hit.dx);
       hit.bomb.kicked();
       
-      this.ctx.textureStore.kickSounds[Math.floor(Math.random() * this.ctx.textureStore.kickSounds.length)].play(); // play kick sound
+      const p = kickPower / this.gameRule.kickPower;
+      let kickSoundIndex;
+      if (this.ctx.gameRule.kickChargeTime > 1) {
+        kickSoundIndex = Math.min(this.ctx.textureStore.kickSounds.length - 1, Math.floor(p*p * this.ctx.textureStore.kickSounds.length));;
+      } else {
+        kickSoundIndex = Math.floor(Math.random() * (this.ctx.textureStore.kickSounds.length - 2)) + 1;
+      }
+      this.ctx.textureStore.kickSounds[kickSoundIndex].play(); // play kick sound
       this.createSmallExplosion(hit.bomb.pos);
 
       // const xpd = hit.dy / hit.dist;

@@ -44,9 +44,21 @@ export const credits: CreditsEntry[] = [
     license: 'Attribution 4.0',
   },
   {
+    name: 'strong kick sound',
+    url: 'https://freesound.org/s/462220',
+    description: 'zap.aif by colmmullally',
+    license: 'Attribution 3.0',
+  },
+  {
     name: 'kick sound',
     url: 'https://freesound.org/s/321101',
     description: 'laser2.wav by nsstudios',
+    license: 'Attribution 4.0',
+  },
+  {
+    name: 'weak kick sound',
+    url: 'https://freesound.org/s/219622',
+    description: 'Little zap - zaps_1a by ani_music',
     license: 'Attribution 4.0',
   },
   {
@@ -80,9 +92,15 @@ export const credits: CreditsEntry[] = [
     license: 'Attribution 4.0',
   },
   {
-    name: 'clock tick',
+    name: 'clock tick sound',
     url: 'https://freesound.org/s/534094',
     description: 'clock-tick-01.flac by pbimal',
     license: 'Creative Commons 0',
   },
+  {
+    name: 'charge start sound',
+    url: 'https://freesound.org/s/720220',
+    description: 'Text_Appear by BaggoNotes',
+    license: 'Creative Commons 0',
+  }
 ];

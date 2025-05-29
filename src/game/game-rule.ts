@@ -8,6 +8,8 @@ export interface GameRule {
   playerSpeed: number;
   kickPower: number;
   kickCooldown: number;
+  kickChargeTime: number; // how long it takes to charge a full strength kick. 0 means instant (no power control)
+  kickOverchargedIsWeaker: boolean;
 
   repairTime: number;
   repairTiles: number;
@@ -16,7 +18,7 @@ export interface GameRule {
 
   bombSpawnIntervalInitial: number;
   bombSpawnIntervalFinal: number;
-  bombKickExplosionDelay: number;
+  resetBombTimerOnKick: number;
 
   canFall: boolean;
 

@@ -17,6 +17,7 @@ export const gameOptions: GameOption[] = [
   {
     caption: 'Game length',
     values: [
+      { label: '15s', value: 15 },
       { label: '30s', value: 30 },
       { label: '60s', value: 60 },
       { label: '90s', value: 90 },
@@ -56,12 +57,36 @@ export const gameOptions: GameOption[] = [
     values: [
       { label: 'Slow', value: 90 },
       { label: 'Normal', value: 60 },
-      { label: 'Fast', value: 45 },
-      { label: 'Very Fast', value: 30 },
+      { label: 'Fast', value: 40 },
+      { label: 'Very Fast', value: 20 },
     ],
     defaultIndex: 1,
     applier: (gameRule, value) => { gameRule.kickCooldown = value; },
     advanced: true,
+  },
+
+  {
+    caption: 'Kick type',
+    values: [
+      { label: 'Simple', value: 0 },
+      { label: 'Hold to charge', value: 1 },
+      { label: 'Precision charge', value: 2 },
+    ],
+    defaultIndex: 0,
+    applier: (gameRule, value) => {
+      if (value === 0) {
+        gameRule.kickChargeTime = 0;
+        gameRule.kickPower = 8;
+      } else if (value === 1){
+        gameRule.kickChargeTime = 90;
+        gameRule.kickPower = 12;
+        gameRule.kickOverchargedIsWeaker = false;
+      } else if (value === 2){
+        gameRule.kickChargeTime = 30;
+        gameRule.kickPower = 10;
+        gameRule.kickOverchargedIsWeaker = true;
+      }
+    },
   },
 
   {
@@ -123,6 +148,17 @@ export const gameOptions: GameOption[] = [
     ],
     defaultIndex: 1,
     applier: (gameRule, value) => gameRule.bomb.explosionDelay = value * 60,
+    advanced: true,
+  },
+
+  {
+    caption: 'Delay bomb explosion after a kick',
+    values: [
+      { label: 'No', value: 0 },
+      { label: 'Yes', value: 1 },
+    ],
+    defaultIndex: 0,
+    applier: (gameRule, value) => { gameRule.resetBombTimerOnKick = value; },
     advanced: true,
   },
 

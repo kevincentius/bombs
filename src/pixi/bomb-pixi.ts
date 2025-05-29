@@ -28,11 +28,11 @@ export class BombPixi {
 
     this.pos = { x: spawnPos.x, y: spawnPos.y };
     this.dir = Math.random() * Math.PI * 2; // random direction
-    this.speed = Math.random() * 2;
+    this.speed = Math.random() * 5;
   }
 
   kicked() {
-    this.time = Math.min(this.time, this.config.spawnTime + this.config.explosionDelay - this.gameRule.bombKickExplosionDelay);
+    this.time = Math.min(this.time, this.config.spawnTime + this.config.explosionDelay * (1 - this.gameRule.resetBombTimerOnKick));
   }
 
   update() {

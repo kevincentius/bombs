@@ -11,10 +11,13 @@ export class TextureStore {
   tileRepair!: Texture;
   tileDestroyed!: Texture;
 
+  chargeBarEmpty!: Texture;
+  chargeBarFull!: Texture;
+
   roundStartSound = new Howl({ src: ['round-start.mp3'] });
   roundEndSound = new Howl({ src: ['round-end.mp3'] });
   repairSound = new Howl({ src: ['repair.mp3'] });
-
+  chargeSound = new Howl({ src: ['charge.mp3'] });
   playerDieSound = new Howl({ src: ['player-die.mp3'] });
   missSound = new Howl({ src: ['miss.mp3'] });
 
@@ -25,9 +28,11 @@ export class TextureStore {
   ];
 
   kickSounds: Howl[] = [
-    new Howl({ src: ['kick0.mp3'], volume: 0.5 }),
+    new Howl({ src: ['kick0.mp3'], volume: 1 }),
     new Howl({ src: ['kick1.mp3'], volume: 0.5 }),
     new Howl({ src: ['kick2.mp3'], volume: 0.5 }),
+    new Howl({ src: ['kick3.mp3'], volume: 0.5 }),
+    new Howl({ src: ['kick4.mp3'], volume: 0.5 }),
   ];
 
   clockTickSound = new Howl({ src: ['clock-tick.mp3'], volume: 1 });
@@ -53,6 +58,8 @@ export class TextureStore {
     ]);
     this.tileRepair = await Assets.load('tile-repair.png');
     this.tileDestroyed = await Assets.load('tile-destroyed.png');
+    this.chargeBarEmpty = await Assets.load('charge-bar-empty.png');
+    this.chargeBarFull = await Assets.load('charge-bar-full.png');
     
     // 1x12 sprite sheet for the explosion:
     const explosionSheet = await Assets.load('explosion.png');
@@ -87,6 +94,8 @@ export class TextureStore {
       ...this.tileActive,
       this.tileRepair,
       this.tileDestroyed,
+      this.chargeBarEmpty,
+      this.chargeBarFull
     ];
     textures.forEach((texture) => {
       texture.source.scaleMode = 'nearest';

@@ -14,11 +14,12 @@ export class TilePixi {
   constructor(
     private textureStore: TextureStore,
     public pos: Pos,
+    private size: number,
   ) {
     this.sprite = new Sprite({
       texture: this.textureStore.tile,
       anchor: { x: 0.5, y: 0.5 },
-      scale: 2.5,
+      scale: this.size / 8,
     });
     this.sprite.position.set(this.pos.x, this.pos.y);
     this.container.addChild(this.sprite);

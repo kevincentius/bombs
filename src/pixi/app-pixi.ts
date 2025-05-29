@@ -43,4 +43,20 @@ export class AppPixi {
       }
     });
   }
+
+  rescale(scale: number) {
+    const appWidth = 800 * scale;
+    const appHeight = 400 * scale;
+
+    this.app.stage.scale.set(scale);
+
+    // Adjust position to center the scaled content
+    this.app.stage.position.set(
+        -(appWidth - 800 * scale) / 2,
+        -(appHeight - 400 * scale) / 2
+    );
+
+    // Resize renderer to match new screen size
+    this.app.renderer.resize(appWidth, appHeight);
+  }
 }

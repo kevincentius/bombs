@@ -11,9 +11,8 @@
 
 .display-data {
   position: absolute;
-  width: 100%;
   display: flex;
-  font-size: 48px;
+  font-size: 96px;
   font-family: 'Pixelify Sans', Arial, sans-serif;
 }
 
@@ -25,4 +24,8 @@
   text-align: center;
   font-size: 0.8em;
   color: #ccc;
+}
+
+.field {
+  // transform-origin: center;
 }

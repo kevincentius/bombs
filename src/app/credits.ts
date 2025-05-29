@@ -78,5 +78,11 @@ export const credits: CreditsEntry[] = [
     url: 'https://freesound.org/s/394453',
     description: 'Bamboo Swing, B9.wav by InspectorJ',
     license: 'Attribution 4.0',
-  }
+  },
+  {
+    name: 'clock tick',
+    url: 'https://freesound.org/s/534094',
+    description: 'clock-tick-01.flac by pbimal',
+    license: 'Creative Commons 0',
+  },
 ];

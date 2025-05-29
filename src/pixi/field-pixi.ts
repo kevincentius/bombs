@@ -38,13 +38,14 @@ export class FieldPixi {
     this.container.addChild(this.playerContainer);
     this.container.addChild(this.bombContainer);
 
+    this.tiles = Array.from({ length: this.gameRule.tiles.rows }, () => []);
     for (let i = 0; i < this.gameRule.tiles.rows; i++) {
       for (let j = 0; j < this.gameRule.tiles.cols; j++) {
         const tilePos: Pos = {
           x: j * this.gameRule.tiles.size + this.gameRule.tiles.size / 2,
           y: i * this.gameRule.tiles.size + this.gameRule.tiles.size / 2,
         };
-        const tile = new TilePixi(this.ctx.textureStore, tilePos);
+        const tile = new TilePixi(this.ctx.textureStore, tilePos, this.gameRule.tiles.size);
         this.tiles[i] = this.tiles[i] || [];
         this.tiles[i][j] = tile;
         this.tileContainer.addChild(tile.container);
@@ -114,7 +115,7 @@ export class FieldPixi {
     this.updateTiles();
 
     if (this.players.length === 0) {
-      this.ctx.gamePixi.game.gameOver();
+      this.ctx.appPixi.game.gameOver();
     }
   }
 
@@ -200,6 +201,7 @@ export class FieldPixi {
         scoreMap.set(team, (scoreMap.get(team) || 0) + 1);
       }
     });
+    console.log('total scores:', scoreMap.get(-1), scoreMap.get(1));
 
     const playerTileCollisionMap = new Map<PlayerPixi, TilePixi[]>();
     this.tiles.flat().forEach(tile => {

@@ -1,14 +1,23 @@
 
-<div class="display-data" *ngIf="ctx">
-  <div class="score" [style.color]="getColor(true)">{{score0}}</div>
-  <div style="flex-grow: 1"></div>
+<div class="display-data" *ngIf="ctx"
+  [style.left]="rect.x + 'px'"
+  [style.top]="rect.y + 'px'"
+  [style.width]="rect.width + 'px'"
+  [style.height]="rect.height + 'px'">
+  <div class="score" [style.color]="getColor(true)"
+    style="flex-grow: 1; text-align: left;"
+  >{{score0}}</div>
+  <div ></div>
   <div>{{ctx.displayData.timeLeft}}</div>
-  <div style="flex-grow: 1"></div>
-  <div class="score" [style.color]="getColor(false)">{{score1}}</div>
+  <div class="score" [style.color]="getColor(false)"
+    style="flex-grow: 1; text-align: right;"
+  >{{score1}}</div>
 </div>
 
 
 <div class="full-center">
   <div class="net"></div>
-  <canvas #canvas class="field" width="800" height="400"></canvas>
+  <canvas #canvas class="field" width="800" height="400">
+    asdf
+  </canvas>
 </div>

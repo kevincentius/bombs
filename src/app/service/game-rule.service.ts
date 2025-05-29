@@ -31,9 +31,9 @@ const defaultGameRule: GameRule = {
   },
   
   tiles: {
-    rows: 20,
-    cols: 40,
-    size: 20,
+    rows: 25,
+    cols: 50,
+    size: 16,
   },
   
   canFall: false,

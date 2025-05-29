@@ -11,6 +11,8 @@ export class GamePixi {
   running = true;
   timeCounter = 0;
 
+  
+
   constructor(
     private ctx: GameContext,
     private textureStore: TextureStore,
@@ -24,17 +26,24 @@ export class GamePixi {
     if (!this.running) return;
 
     this.timeCounter++;
-    if (this.timeCounter >= 60) {
+    if (this.timeCounter >= 60 && this.ctx.displayData.timeLeft > 0) {
       this.timeCounter = 0;
       this.ctx.displayData.timeLeft--;
+      
+      if (this.ctx.displayData.timeLeft < 10) {
+        this.textureStore.clockTickSound.play();
+      }
 
       if (this.ctx.displayData.timeLeft == 0) {
         this.textureStore.roundEndSound.play();
       }
     }
 
-
     this.field.update();
+
+    if (this.field.bombs.length === 0 && this.ctx.displayData.timeLeft <= 0) {
+      
+    }
   }
 
   gameOver() {

@@ -14,14 +14,14 @@ import { Pos } from "./types";
 export class GameContext {
   displayData: DisplayData;
   textureStore = new TextureStore();
-  gamePixi: AppPixi;
+  appPixi: AppPixi;
   inputHandler = new InputHandler();
 
   constructor(
     private canvas: HTMLCanvasElement,
     public gameRule: GameRule,
   ) {
-    this.gamePixi = new AppPixi(this, this.canvas, this.textureStore);
+    this.appPixi = new AppPixi(this, this.canvas, this.textureStore);
 
     this.displayData = {
       teams: [
@@ -34,7 +34,7 @@ export class GameContext {
 
   async init() {
     await this.textureStore.init();
-    await this.gamePixi.init();
+    await this.appPixi.init();
   }
   
   newGame() { return new GamePixi(this, this.textureStore); }

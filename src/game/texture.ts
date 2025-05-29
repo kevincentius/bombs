@@ -30,6 +30,8 @@ export class TextureStore {
     new Howl({ src: ['kick2.mp3'], volume: 0.5 }),
   ];
 
+  clockTickSound = new Howl({ src: ['clock-tick.mp3'], volume: 1 });
+
   async init() {
     this.players = await Promise.all([
       Assets.load('player0.png'),

@@ -15,9 +15,10 @@ export class TilePixi {
     private textureStore: TextureStore,
     public pos: Pos,
     private size: number,
+    private variant: number,
   ) {
     this.sprite = new Sprite({
-      texture: this.textureStore.tile,
+      texture: this.textureStore.tile[this.variant],
       anchor: { x: 0.5, y: 0.5 },
       scale: this.size / 8,
     });
@@ -45,7 +46,7 @@ export class TilePixi {
   updateSprite() {
     // this.sprite.alpha = this.alive ? 1 : 0.3;
     this.sprite.texture = this.alive
-      ? (this.active ? this.textureStore.tileActive : this.textureStore.tile)
+      ? (this.active ? this.textureStore.tileActive[this.variant] : this.textureStore.tile[this.variant])
       : (this.active ? this.textureStore.tileRepair : this.textureStore.tileDestroyed);
   }
 }

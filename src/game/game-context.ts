@@ -11,11 +11,15 @@ import { PlayerSettings } from "./player-settings";
 import { TextureStore } from "./texture";
 import { Pos } from "./types";
 
+const textureStore = new TextureStore();
+const inputHandler = new InputHandler();
+
 export class GameContext {
   displayData: DisplayData;
-  textureStore = new TextureStore();
+  textureStore = textureStore;
   appPixi: AppPixi;
-  inputHandler = new InputHandler();
+  inputHandler = inputHandler;
+  winner: number | null = null; // -1 for left, 1 for right, 0 for draw, null for ongoing game
 
   constructor(
     private canvas: HTMLCanvasElement,
@@ -41,4 +45,9 @@ export class GameContext {
   newField() { return new FieldPixi(this, this.gameRule, this.textureStore); }
   newPlayer(texture: Texture, boundary: PlayerBoundary, settings: PlayerSettings, team: number) { return new PlayerPixi(this, texture, this.inputHandler, boundary, settings, team); }
   newBomb(pos: Pos) { return new BombPixi(this.textureStore, this.gameRule, pos ); }
+
+  destroy() {
+    this.appPixi.app.stop();
+    this.appPixi.app.destroy();
+  }
 }

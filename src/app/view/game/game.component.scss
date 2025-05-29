@@ -10,10 +10,11 @@
 }
 
 .display-data {
-  position: absolute;
   display: flex;
   font-size: 96px;
   font-family: 'Pixelify Sans', Arial, sans-serif;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .footnote {

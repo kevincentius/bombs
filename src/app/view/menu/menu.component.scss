@@ -1,4 +1,49 @@
 
+:host {
+  box-sizing: border-box;
+  background: linear-gradient(45deg, #1e3c72, #2a5298);
+  display: block;
+  height: 100;
+  overflow: auto;
+  padding: 20px 60px;
+}
+
+.player-icon-banner {
+  display: flex;
+  gap: 20px;
+}
+
+.player-icon {
+  height: 64px;
+  image-rendering: pixelated;
+
+  &.player-icon-disabled {
+    opacity: 0.15;
+  }
+}
+
+h3 {
+  cursor: pointer;
+  display: block;
+  margin: 0;
+  padding: 15px 0;
+  
+  &:hover {
+    text-decoration: underline;
+    color: #4caf50;
+  }
+}
+
+a {
+  color: #4caf50;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    color: #66bb6a;
+  }
+}
+
 .game-settings-menu {
   display: flex;
   flex-direction: column;
@@ -14,5 +59,20 @@
 
   .input-value {
     flex-grow: 1;
+  }
+}
+
+.start-button {
+  cursor: pointer;
+
+  text-align: center;
+  padding: 20px;
+  display: inline-block;
+
+  font-size: 48px;
+  background: linear-gradient(45deg, #4caf50, #81c784);
+
+  &:hover {
+    background: linear-gradient(45deg, #66bb6a, #a5d6a7);
   }
 }

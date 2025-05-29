@@ -1,7 +1,16 @@
 
-<h3>
-  ► Dino & Bombs
-</h3>
+<h1>
+  Dino & Bombs
+</h1>
+
+<div class="player-icon-banner">
+  <img class="player-icon" src="player0.png" />
+  <img class="player-icon" src="player1.png" />
+  <img class="player-icon" [class.player-icon-disabled]="!r.fourPlayers" src="player2.png" />
+  <img class="player-icon" [class.player-icon-disabled]="!r.fourPlayers" src="player3.png" />
+</div>
+
+<div style="height: 20px"></div>
 
 <div class="text-unselectable game-settings-menu">
   <ng-container *ngIf="!useJson">
@@ -71,41 +80,49 @@
   </div>
 
   <div>
-    <button style="font-size: 48px" (click)="onPlayClick()"> Start Game </button>
+    <div class="start-button" (click)="onPlayClick()"> Start Game </div>
   </div>
 </div>
 
-<hr/><div style="height: 50px;"></div>
+<div style="height: 50px;"></div>
 
 <h3 (click)="toggleHowTo()" style="cursor: pointer;">
   ► How to play
 </h3>
 <div *ngIf="showHowTo">
-  <div>When the time runs out, the team with the most tiles left wins!</div>
-  <div>Tip: stop near holes to start repairing.</div>
-  <div>Player 1: WASD + Q</div>
-  <div>Player 2: Arrow keys + Enter</div>
-  <div>Player 3: IJKL + Space</div>
-  <div>Player 4: Numpad 8456 + Numpad+ </div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div>Kick bombs to the opponent's field! When the time runs out, the team with the most tiles left wins.</div>
+    <div>Tip: stop near holes to start repairing.</div>
+    <div>Player 1: WASD + Q</div>
+    <div>Player 2: Arrow keys + Enter</div>
+    <div>Player 3: IJKL + Space</div>
+    <div>Player 4: Numpad 8456 + Numpad+ </div>
+  </div>
   
-  <hr/><div style="height: 50px;"></div>
+  <div style="height: 50px;"></div>
 </div>
 
 <h3 (click)="toggleAcknowledgements()" style="cursor: pointer;">
   ► Acknowledgements
 </h3>
 
-<table border="1" *ngIf="showAcknowledgements">
-  <tr>
-    <td>resource</td>
-    <td>origin</td>
-    <td>license</td>
-    <td>link</td>
-  </tr>
-  <tr *ngFor="let creditData of credits">
-    <td>{{creditData.name}}</td>
-    <td>{{creditData.description}}</td>
-    <td>{{creditData.license}}</td>
-    <td><a href="{{creditData.url}}">{{creditData.url}}</a></td>
-  </tr>
-</table>
+<div *ngIf="showAcknowledgements">
+  <table border="1">
+    <tr>
+      <td>resource</td>
+      <td>origin</td>
+      <td>license</td>
+      <td>link</td>
+    </tr>
+    <tr *ngFor="let creditData of credits">
+      <td>{{creditData.name}}</td>
+      <td>{{creditData.description}}</td>
+      <td>{{creditData.license}}</td>
+      <td><a href="{{creditData.url}}">{{creditData.url}}</a></td>
+    </tr>
+  </table>
+  
+  <div style="height: 10px;"></div>
+  
+  <div>Game concept was developed during a <a href="https://game-jam-do.de">mini game jam</a> :) .</div>
+</div>

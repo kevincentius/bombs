@@ -2,6 +2,7 @@ import { TextureStore } from "../game/texture";
 import { GameContext } from "../game/game-context";
 import { FieldPixi } from "./field-pixi";
 import { Container } from "pixi.js";
+import { Subject } from "rxjs";
 
 export class GamePixi {
   container = new Container();
@@ -11,7 +12,7 @@ export class GamePixi {
   running = true;
   timeCounter = 0;
 
-  
+  subjGameOver = new Subject<void>();
 
   constructor(
     private ctx: GameContext,
@@ -42,7 +43,8 @@ export class GamePixi {
     this.field.update();
 
     if (this.field.bombs.length === 0 && this.ctx.displayData.timeLeft <= 0) {
-      
+      this.ctx.winner = this.ctx.displayData.teams[0].score > this.ctx.displayData.teams[1].score ? -1 :
+        this.ctx.displayData.teams[0].score < this.ctx.displayData.teams[1].score ? 1 : 0;
     }
   }
 

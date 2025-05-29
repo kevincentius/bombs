@@ -13,7 +13,8 @@ import { GameRuleService } from '../../service/game-rule.service';
   styleUrl: './game.component.scss'
 })
 export class GameComponent {
-  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
+  domCanvas = false;
 
   ctx?: GameContext;
   scale = 1;
@@ -45,10 +46,25 @@ export class GameComponent {
   }
 
   async ngOnInit() {
-    this.ctx = new GameContext(this.canvas.nativeElement, this.gameRuleService.gameRule!);
-    await this.ctx.init();
+    await this.newGame();
+  }
 
-    this.onResize();
+  private async newGame() {
+    return new Promise<void>(async (resolve) => {
+      this.domCanvas = false;
+      setTimeout(() => {
+        this.domCanvas = true;
+
+        setTimeout(async () => {
+          this.ctx = new GameContext(this.canvas.nativeElement, this.gameRuleService.gameRule!);
+          await this.ctx.init();
+      
+          this.onResize();
+
+          resolve();
+        });
+      });
+    });
   }
 
   // auto resize canvas (800x400) to fit screen, while preserving aspect ratio
@@ -69,8 +85,6 @@ export class GameComponent {
     canvas.width = 800 * this.scale;
     canvas.height = 400 * this.scale;
 
-    // // update pixi app
-    
     // Apply scale to stage
     this.ctx.appPixi.rescale(this.scale);
 
@@ -79,8 +93,25 @@ export class GameComponent {
         x: canvas.offsetLeft,
         y: canvas.offsetTop,
         width: canvas.offsetWidth,
-        height: canvas.offsetHeight
+        height: canvas.offsetHeight,
       }
     });
+  }
+
+  // backspace restart game
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (!this.ctx) return;
+    // if (this.ctx?.winner == null) return;
+
+    if (event.key === 'Backspace') {
+      this.ctx.destroy();
+      this.newGame();
+    }
+    
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      window.location.href = '/';
+    }
   }
 }

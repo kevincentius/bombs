@@ -67,9 +67,9 @@ export const gameOptions: GameOption[] = [
   {
     caption: 'Repair speed',
     values: [
-      { label: 'Fast', value: 14 },
-      { label: 'Normal', value: 20 },
-      { label: 'Slow', value: 30 },
+      { label: 'Fast', value: 8 },
+      { label: 'Normal', value: 14 },
+      { label: 'Slow', value: 24 },
       { label: 'Disabled', value: 999999999 },
     ],
     defaultIndex: 1,

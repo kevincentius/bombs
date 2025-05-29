@@ -6,8 +6,8 @@ export class TextureStore {
   bomb!: Texture;
   explosion!: Texture[];
   smallExplosion!: Texture[];
-  tile!: Texture;
-  tileActive!: Texture;
+  tile!: Texture[];
+  tileActive!: Texture[];
   tileRepair!: Texture;
   tileDestroyed!: Texture;
 
@@ -31,19 +31,26 @@ export class TextureStore {
   ];
 
   clockTickSound = new Howl({ src: ['clock-tick.mp3'], volume: 1 });
+  initialized = false;
 
   async init() {
+    if (this.initialized) return;
+
     this.players = await Promise.all([
       Assets.load('player0.png'),
       Assets.load('player1.png'),
       Assets.load('player2.png'),
       Assets.load('player3.png'),
     ]);
-    this.players.forEach((texture) => texture.source.scaleMode = 'nearest');
     this.bomb = await Assets.load('bomb.png');
-    this.bomb.source.scaleMode = 'nearest';
-    this.tile = await Assets.load('tile.png');
-    this.tileActive = await Assets.load('tile-active.png');
+    this.tile = await Promise.all([
+      Assets.load('tile0.png'),
+      Assets.load('tile1.png'),
+    ]);
+    this.tileActive = await Promise.all([
+      await Assets.load('tile-active0.png'),
+      await Assets.load('tile-active1.png'),
+    ]);
     this.tileRepair = await Assets.load('tile-repair.png');
     this.tileDestroyed = await Assets.load('tile-destroyed.png');
     
@@ -70,6 +77,20 @@ export class TextureStore {
         }
       ));
     }
+
+    const textures = [
+      ...this.players,
+      this.bomb,
+      ...this.explosion,
+      ...this.smallExplosion,
+      ...this.tile,
+      ...this.tileActive,
+      this.tileRepair,
+      this.tileDestroyed,
+    ];
+    textures.forEach((texture) => {
+      texture.source.scaleMode = 'nearest';
+    });
   }
 
 }

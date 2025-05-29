@@ -1,5 +1,5 @@
 
-<div class="display-data" *ngIf="ctx"
+<div class="overlay display-data" *ngIf="ctx"
   [style.left]="rect.x + 'px'"
   [style.top]="rect.y + 'px'"
   [style.width]="rect.width + 'px'"
@@ -14,10 +14,17 @@
   >{{score1}}</div>
 </div>
 
+<div class="overlay full-center game-over-overlay" *ngIf="ctx?.winner != null">
+  <div style="font-size: 96px;">
+    <ng-container *ngIf="ctx!.winner == -1">Left team wins!</ng-container>
+    <ng-container *ngIf="ctx!.winner == 1">Right team wins!</ng-container>
+    <ng-container *ngIf="ctx!.winner == 0">Draw!!!</ng-container>
+  </div>
+  <div style="height: 50px;"></div>
+  <div style="font-size: 36px">Press Backspace to play again</div>
+</div>
 
 <div class="full-center">
   <div class="net"></div>
-  <canvas #canvas class="field" width="800" height="400">
-    asdf
-  </canvas>
+  <canvas *ngIf="domCanvas" #canvas class="field" width="800" height="400"></canvas>
 </div>

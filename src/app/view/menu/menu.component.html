@@ -8,6 +8,7 @@
   <img class="player-icon" src="player1.png" />
   <img class="player-icon" [class.player-icon-disabled]="!r.fourPlayers" src="player2.png" />
   <img class="player-icon" [class.player-icon-disabled]="!r.fourPlayers" src="player3.png" />
+  <div *ngIf="loading" class="blink_me" style="font-size: 48px;">Loading...</div>
 </div>
 
 <div style="height: 20px"></div>

@@ -80,3 +80,13 @@ a {
     background: linear-gradient(45deg, #66bb6a, #a5d6a7);
   }
 }
+
+.blink_me {
+  animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

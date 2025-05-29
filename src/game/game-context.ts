@@ -18,8 +18,8 @@ const initPromise = Promise.all([
   textureStore.init(),
 ]);
 
-export function test() {
-  console.log('hello');
+export async function preload() {
+  return initPromise;
 }
 
 export class GameContext {

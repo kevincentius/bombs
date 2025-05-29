@@ -6,7 +6,7 @@ import { GameRuleService } from '../../service/game-rule.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { GameContext, test } from '../../../game/game-context'; // preload
+import { preload } from '../../../game/game-context'; // preload
 
 @Component({
   selector: 'app-menu',
@@ -35,6 +35,7 @@ export class MenuComponent {
 
   showAcknowledgements = false;
   showHowTo = false;
+  loading = true;
 
   constructor(
     private gameRuleService: GameRuleService,
@@ -43,8 +44,12 @@ export class MenuComponent {
     this.gameRuleService.applyDefaultGameRule();
 
     this.gameOptionsJson = JSON.stringify(this.r, null, 2);
+  }
 
-    test();
+  async ngOnInit() {
+    await preload();
+
+    this.loading = false;
   }
 
   onPlayClick() {

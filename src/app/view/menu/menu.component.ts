@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { credits } from '../../credits';
 import { CommonModule } from '@angular/common';
-import { GameRule } from '../../../game/game-rule';
 import { gameOptions } from './game-options';
 import { GameRuleService } from '../../service/game-rule.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { GameContext, test } from '../../../game/game-context'; // preload
 
 @Component({
   selector: 'app-menu',
@@ -42,6 +43,8 @@ export class MenuComponent {
     this.gameRuleService.applyDefaultGameRule();
 
     this.gameOptionsJson = JSON.stringify(this.r, null, 2);
+
+    test();
   }
 
   onPlayClick() {

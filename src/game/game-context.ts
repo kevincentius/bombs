@@ -14,6 +14,14 @@ import { Pos } from "./types";
 const textureStore = new TextureStore();
 const inputHandler = new InputHandler();
 
+const initPromise = Promise.all([
+  textureStore.init(),
+]);
+
+export function test() {
+  console.log('hello');
+}
+
 export class GameContext {
   displayData: DisplayData;
   textureStore = textureStore;
@@ -37,7 +45,7 @@ export class GameContext {
   }
 
   async init() {
-    await this.textureStore.init();
+    await initPromise;
     await this.appPixi.init();
   }
   

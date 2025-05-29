@@ -57,12 +57,21 @@ const defaultGameRule: GameRule = {
   providedIn: 'root'
 })
 export class GameRuleService {
-
   gameRule?: GameRule;
 
   constructor() {}
 
   applyDefaultGameRule() {
     this.gameRule = { ...defaultGameRule };
+  }
+  
+  applyGameRuleFromJson(gameOptionsJson: string) {
+    try {
+      const parsedRule = JSON.parse(gameOptionsJson);
+      this.gameRule = { ...defaultGameRule, ...parsedRule };
+    } catch (e) {
+      alert('Invalid game rule JSON: ' + e);
+      this.applyDefaultGameRule();
+    }
   }
 }

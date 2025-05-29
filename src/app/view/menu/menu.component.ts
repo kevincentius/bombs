@@ -28,7 +28,7 @@ export class MenuComponent {
   showAdvanced = false;
   useJson = false;
 
-  r: GameRule;
+  get r() { return this.gameRuleService.gameRule!; }
   
   gameOptionsJson = '';
 
@@ -40,15 +40,17 @@ export class MenuComponent {
     private router: Router,
   ) {
     this.gameRuleService.applyDefaultGameRule();
-    this.r = this.gameRuleService.gameRule!;
 
     this.gameOptionsJson = JSON.stringify(this.r, null, 2);
   }
 
   onPlayClick() {
-    const r = this.r;
     
-    this.gameOptions.forEach(opt => opt.applier(r, opt.value));
+    if (this.useJson) {
+      this.gameRuleService.applyGameRuleFromJson(this.gameOptionsJson);
+    } else {
+      this.gameOptions.forEach(opt => opt.applier(this.r, opt.value));
+    }
     this.router.navigate(['/game']);
   }
 

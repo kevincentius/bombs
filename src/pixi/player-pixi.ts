@@ -124,7 +124,7 @@ export class PlayerPixi {
       if (this.inputHandler.isDown(this.settings.controls[InputKey.ACTION])) {
         if (this.rule.kick.charge.time == 0) {
           this.kickCooldown = this.rule.kick.cooldown;
-          this.subjKick.next(this.rule.kick.power);
+          this.subjKick.next(this.rule.kick.power * this.rule.kick.powerMult);
         } else if (this.kickCooldown <= 0) {
           if (this.kickChargeCounter == 0) {
             this.chargeSoundId = this.ctx.textureStore.chargeSound.play();
@@ -134,7 +134,7 @@ export class PlayerPixi {
       } else {
         if (this.kickChargeCounter > 0) {
           this.kickCooldown = this.rule.kick.cooldown;
-          this.subjKick.next(this.getKickChargeValue() * this.rule.kick.power);
+          this.subjKick.next(this.getKickChargeValue() * this.rule.kick.power * this.rule.kick.powerMult);
           this.kickChargeCounter = 0;
         }
       }

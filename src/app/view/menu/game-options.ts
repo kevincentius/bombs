@@ -86,9 +86,21 @@ export const gameOptions: GameOption[] = [
         gameRule.player.kick.charge.time = 30;
         gameRule.player.kick.power = 10;
         gameRule.player.kick.charge.overchargedIsWeaker = true;
-        gameRule.player.kick.charge.precisionExp = 3;
+        gameRule.player.kick.charge.precisionExp = 5;
       }
     },
+  },
+
+  {
+    caption: 'Kick power',
+    values: [
+      { label: 'Weak', value: 0.75 },
+      { label: 'Normal', value: 1 },
+      { label: 'Strong', value: 1.5 },
+      { label: 'Very Strong', value: 2 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.player.kick.powerMult = value; },
   },
 
   {
@@ -162,6 +174,27 @@ export const gameOptions: GameOption[] = [
     defaultIndex: 0,
     applier: (gameRule, value) => { gameRule.bomb.resetTimerOnKick = value; },
     advanced: true,
+  },
+
+  {
+    caption: 'Bomb explode on collision',
+    values: [
+      { label: 'No', value: 999999999 },
+      { label: 'Yes', value: 4 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.bomb.collision.speedToKillPlayers = value; },
+    advanced: true,
+  },
+
+  {
+    caption: 'Friendly fire',
+    values: [
+      { label: 'No', value: 0 },
+      { label: 'Yes', value: 1 },
+    ],
+    defaultIndex: 1,
+    applier: (gameRule, value) => { gameRule.bomb.collision.friendlyFire = value !== 0; },
   },
 
   {

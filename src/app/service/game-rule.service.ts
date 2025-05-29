@@ -13,6 +13,7 @@ const defaultGameRule: GameRule = {
     kick: {
       reach: 60,
       power: 8,
+      powerMult: 1,
       cooldown: 60,
       charge: {
         time: 90,

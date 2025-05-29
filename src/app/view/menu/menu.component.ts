@@ -21,13 +21,7 @@ import { preload } from '../../../game/game-context'; // preload
 export class MenuComponent {
   credits = credits;
 
-  gameOptions = gameOptions.map(opt => ({
-    ...opt,
-    value: opt.values[opt.defaultIndex].value,
-  }));
-
   showAdvanced = false;
-  useJson = false;
 
   get r() { return this.gameRuleService.gameRule!; }
   
@@ -36,6 +30,15 @@ export class MenuComponent {
   showAcknowledgements = false;
   showHowTo = false;
   loading = true;
+
+  options = {
+    gameOptions: gameOptions.map(opt => ({
+      ...opt,
+      value: opt.values[opt.defaultIndex].value,
+    })),
+    useJson: false,
+    gameOptionsJson: '',
+  };
 
   constructor(
     private gameRuleService: GameRuleService,
@@ -53,11 +56,10 @@ export class MenuComponent {
   }
 
   onPlayClick() {
-    
-    if (this.useJson) {
+    if (this.options.useJson) {
       this.gameRuleService.applyGameRuleFromJson(this.gameOptionsJson);
     } else {
-      this.gameOptions.forEach(opt => opt.applier(this.r, opt.value));
+      this.options.gameOptions.forEach(opt => opt.applier(this.r, opt.value));
     }
     this.router.navigate(['/game']);
   }
@@ -72,5 +74,13 @@ export class MenuComponent {
 
   toggleHowTo() {
     this.showHowTo = !this.showHowTo;
+  }
+
+  resetDefaults() {
+    this.gameRuleService.applyDefaultGameRule();
+    this.options.gameOptions.forEach(opt => {
+      opt.value = opt.values[opt.defaultIndex].value;
+    });
+    this.gameOptionsJson = JSON.stringify(this.r, null, 2);
   }
 }

@@ -369,7 +369,7 @@ export class FieldPixi {
       hit.bomb.dir = Math.atan2(hit.dy, hit.dx);
       hit.bomb.kicked(playerId, team);
       
-      const p = kickPower / this.gameRule.player.kick.power;
+      const p = kickPower / (this.gameRule.player.kick.power * this.gameRule.player.kick.powerMult);
       let kickSoundIndex;
       if (this.ctx.gameRule.player.kick.charge.time > 1) {
         kickSoundIndex = Math.min(this.ctx.textureStore.kickSounds.length - 1, Math.floor(p*p * this.ctx.textureStore.kickSounds.length));;

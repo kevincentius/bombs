@@ -14,8 +14,8 @@
 <div style="height: 20px"></div>
 
 <div class="text-unselectable game-settings-menu">
-  <ng-container *ngIf="!useJson">
-    <ng-container *ngFor="let gameOption of gameOptions; let i=index">
+  <ng-container *ngIf="!options.useJson">
+    <ng-container *ngFor="let gameOption of options.gameOptions; let i=index">
       <div class="input-row" *ngIf="!gameOption.advanced || showAdvanced">
         <div class="input-caption">{{gameOption.caption}}</div>
         <div class="input-value">
@@ -49,7 +49,7 @@
       </div>
     </div>
   </ng-container>
-  <div class="input-row" *ngIf="useJson">
+  <div class="input-row" *ngIf="options.useJson">
     <div class="input-caption">Game settings</div>
     <div class="input-value">
       <textarea style="width: 100%; height: 100px;" [(ngModel)]="gameOptionsJson"></textarea>
@@ -61,7 +61,7 @@
     <div class="input-value">
       <div>
         <label style="cursor: pointer;">
-          <input type="checkbox" [(ngModel)]="useJson">
+          <input type="checkbox" [(ngModel)]="options.useJson">
           Use JSON settings
         </label>
       </div>
@@ -77,6 +77,13 @@
           Show advanced options
         </label>
       </div>
+    </div>
+  </div>
+
+  <div class="input-row">
+    <div class="input-caption"></div>
+    <div class="input-value">
+      <button (click)="resetDefaults()">Reset to defaults</button>
     </div>
   </div>
 

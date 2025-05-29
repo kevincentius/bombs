@@ -11,6 +11,7 @@ export interface GameRule {
     kick: {
       reach: number;
       power: number;
+      powerMult: number;
       cooldown: number;
       charge: {
         time: number; // how long it takes to charge a full strength kick. 0 means instant (no power control)

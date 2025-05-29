@@ -74,10 +74,16 @@ export const credits: CreditsEntry[] = [
     license: 'Creative Commons 0',
   },
   {
+    // Squeeze Toy.mp3 by survivalzombie -- https://freesound.org/s/240015/ -- License: Creative Commons 0
     name: 'player die sound',
-    url: 'https://freesound.org/s/685067',
-    description: 'Rubber Duck by Slothfully_So',
+    url: 'https://freesound.org/s/240015',
+    description: 'Squeeze Toy.mp3 by survivalzombie',
     license: 'Creative Commons 0',
+
+    // name: 'player die sound',
+    // url: 'https://freesound.org/s/685067',
+    // description: 'Rubber Duck by Slothfully_So',
+    // license: 'Creative Commons 0',
   },
   {
     name: 'repair sound',
@@ -102,5 +108,17 @@ export const credits: CreditsEntry[] = [
     url: 'https://freesound.org/s/720220',
     description: 'Text_Appear by BaggoNotes',
     license: 'Creative Commons 0',
-  }
+  },
+  {
+    name: 'hit sound',
+    url: 'https://freesound.org/s/537060',
+    description: 'boing.wav by suzenako',
+    license: 'Creative Commons 0',
+  },
+  {
+    name: 'bounce sound',
+    url: 'https://freesound.org/s/505628',
+    description: 'Basketball Bounce.wav by HighPixel',
+    license: 'Creative Commons 0',
+  },
 ];

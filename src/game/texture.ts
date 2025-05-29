@@ -4,6 +4,7 @@ import {Howl, Howler} from 'howler';
 export class TextureStore {
   players!: Texture[];
   bomb!: Texture;
+  bombLit!: Texture;
   explosion!: Texture[];
   smallExplosion!: Texture[];
   tile!: Texture[];
@@ -20,6 +21,8 @@ export class TextureStore {
   chargeSound = new Howl({ src: ['charge.mp3'] });
   playerDieSound = new Howl({ src: ['player-die.mp3'] });
   missSound = new Howl({ src: ['miss.mp3'] });
+  bombHitSound = new Howl({ src: ['hit.mp3'], volume: 1 });
+  bounceSound = new Howl({ src: ['bounce.mp3'], volume: 0.5 });
 
   bombSpawnSound = new Howl({ src: ['bomb-spawn.mp3'], volume: 0.5 });
   explosionSounds: Howl[] = [
@@ -48,6 +51,7 @@ export class TextureStore {
       Assets.load('player3.png'),
     ]);
     this.bomb = await Assets.load('bomb.png');
+    this.bombLit = await Assets.load('bomb-lit.png');
     this.tile = await Promise.all([
       Assets.load('tile0.png'),
       Assets.load('tile1.png'),
@@ -88,6 +92,7 @@ export class TextureStore {
     const textures = [
       ...this.players,
       this.bomb,
+      this.bombLit,
       ...this.explosion,
       ...this.smallExplosion,
       ...this.tile,

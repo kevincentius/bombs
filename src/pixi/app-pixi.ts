@@ -37,8 +37,9 @@ export class AppPixi {
     this.app.ticker.add(delta => {
       const now = Date.now();
       
-      while (now - lastUpdate >= mspf) {
+      if (now - lastUpdate >= mspf) {
         lastUpdate += mspf;
+        lastUpdate = Math.max(lastUpdate, now - mspf);
         this.game.update();
       }
     });

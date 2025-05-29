@@ -9,6 +9,7 @@ export interface GameRule {
     speed: number;
     
     kick: {
+      reach: number;
       power: number;
       cooldown: number;
       charge: {
@@ -38,6 +39,20 @@ export interface GameRule {
     explosionRadius: number;
     tileDestroyRadius: number;
     resetTimerOnKick: number;
+
+    animation: {
+      litTime: number;
+      litBlinkIntervalInitial: number;
+      litBlinkIntervalFinal: number;
+      litOpacity: number;
+      shakePower: number;
+    };
+
+    collision: {
+      speedToKillPlayers: number; // if the bomb moves at this speed, it can kill players
+      friendlyFire: boolean;
+      gracePeriod: number; // period before the bomb can hit the kicker himself
+    },
   },
 
   tiles: {

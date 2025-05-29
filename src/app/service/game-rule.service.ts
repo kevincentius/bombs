@@ -11,6 +11,7 @@ const defaultGameRule: GameRule = {
   player: {
     speed: 2.5,
     kick: {
+      reach: 60,
       power: 8,
       cooldown: 60,
       charge: {
@@ -37,11 +38,25 @@ const defaultGameRule: GameRule = {
     explosionDelay: 4000 / (1000 / 60),
     vMult: 0.99,
     vDeccel: 0.01,
-    radius: 20,
+    radius: 16,
     explosionRadius: 30,
     tileDestroyRadius: 20,
 
     resetTimerOnKick: 0, // 0 - 1
+
+    collision: {
+      speedToKillPlayers: 4, // if the bomb moves at this speed, it can kill players
+      friendlyFire: true, // if true, players can kick bombs into each other
+      gracePeriod: 10,
+    },
+
+    animation: {
+      shakePower: 2,
+      litTime: 180,
+      litBlinkIntervalInitial: 12,
+      litBlinkIntervalFinal: 4,
+      litOpacity: 0.9,
+    },
   },
   
   tiles: {

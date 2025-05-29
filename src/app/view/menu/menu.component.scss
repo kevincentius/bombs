@@ -1,11 +1,15 @@
 
 :host {
   box-sizing: border-box;
-  background: linear-gradient(45deg, #1e3c72, #2a5298);
   display: block;
   height: 100;
   overflow: auto;
   padding: 20px 60px;
+}
+
+h1 {
+  font-family: 'Pixelify Sans', Arial, sans-serif;
+  font-size: 96px;
 }
 
 .player-icon-banner {

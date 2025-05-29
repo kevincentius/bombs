@@ -46,6 +46,7 @@ export class PlayerPixi {
     private boundary: PlayerBoundary,
     private settings: PlayerSettings,
     public team: number, // -1 for left, 1 for right
+    public readonly id: number, // player id, used for debugging
   ) {
     this.sprite = new Sprite({
       texture: this.texture,
@@ -100,7 +101,7 @@ export class PlayerPixi {
     return this.respawnCounterLeft <= 0;
   }
 
-  update() {
+  updateWithoutRepairs() {
     // 3 seconds
     if (this.respawnCounterLeft > 0) {
       if (this.respawnCounterLeft > 180) {
@@ -116,7 +117,7 @@ export class PlayerPixi {
     }
 
     // movement
-    let isMoving = this.handleMovement();
+    this.handleMovement();
 
     // kick
     if (this.isAlive() && this.kickCooldown <= 0) {
@@ -144,13 +145,6 @@ export class PlayerPixi {
     // kick cooldown
     this.kickCooldown = Math.max(0, this.kickCooldown - 1);
 
-    // repair
-    if (!isMoving) {
-      this.repairCounter++;
-    } else {
-      this.repairCounter = 0;
-    }
-
     this.container.position.set(this.pos.x, this.pos.y);
 
     const p = this.kickCooldown / this.rule.kick.cooldown;
@@ -169,6 +163,14 @@ export class PlayerPixi {
 
     this.chargeBarContainer.visible = (this.kickChargeCounter > 0);
     this.mask.width = this.chargeBarW * this.getKickChargeValue();
+  }
+
+  updateRepairs() {
+    if (this.lastPos.x == this.pos.x && this.lastPos.y == this.pos.y) {
+      this.repairCounter++;
+    } else {
+      this.repairCounter = 0;
+    }
   }
 
   private handleMovement() {

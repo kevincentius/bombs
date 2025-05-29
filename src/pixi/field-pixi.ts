@@ -98,32 +98,37 @@ export class FieldPixi {
       }
     };
     
-    this.addPlayer(this.ctx.newPlayer(this.textureStore.players[0], boundaryLeft, p1Settings, -1));
-    this.addPlayer(this.ctx.newPlayer(this.textureStore.players[1], boundaryRight, p2Settings, 1));
+    this.addPlayer(this.ctx.newPlayer(this.textureStore.players[0], boundaryLeft, p1Settings, -1, 0));
+    this.addPlayer(this.ctx.newPlayer(this.textureStore.players[1], boundaryRight, p2Settings, 1, 1));
 
     if (this.gameRule.fourPlayers) {
-      this.addPlayer(this.ctx.newPlayer(this.textureStore.players[2], boundaryLeft, p3Settings, -1));
-      this.addPlayer(this.ctx.newPlayer(this.textureStore.players[3], boundaryRight, p4Settings, 1));
+      this.addPlayer(this.ctx.newPlayer(this.textureStore.players[2], boundaryLeft, p3Settings, -1, 2));
+      this.addPlayer(this.ctx.newPlayer(this.textureStore.players[3], boundaryRight, p4Settings, 1, 3));
     }
   }
 
   update() {
-    this.updatePlayers();
-
+    this.updatePlayersWithoutRepairs();
+    // ugly, but this updatePlayerRepairs must be done after updatePlayers and updateTiles. Because collision detection and move undo is done in updateTiles.
+    this.updatePlayerRepairs();
     this.updateBombSpawner();
     this.updateBombs();
     this.updateTiles();
+
 
     if (this.players.length === 0) {
       this.ctx.appPixi.game.gameOver();
     }
   }
 
-  updatePlayers() {
+  updatePlayersWithoutRepairs() {
     this.players.forEach(player => {
-      player.update();
-      this.container.addChild(player.container);
+      player.updateWithoutRepairs();
     });
+  }
+
+  updatePlayerRepairs() {
+    this.players.forEach(player => player.updateRepairs());
   }
 
   updateBombSpawner() {
@@ -153,23 +158,52 @@ export class FieldPixi {
     this.bombs = this.bombs.filter(bomb => {
       const exploded = bomb.update();
       if (exploded) {
-        this.textureStore.explosionSounds[
-          Math.floor(Math.random() * this.textureStore.explosionSounds.length)
-        ].play(); // play explosion sound
-        this.createExplosion(bomb.pos);
-
-        this.getAlivePlayers().forEach(player => {
-          const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
-          if (dist < player.radius + bomb.config.explosionRadius) {
-            this.killPlayer(player);
-          }
-        });
-
-        // destroy tiles
-        this.destroyTiles(bomb.pos, bomb.config.tileDestroyRadius);
+        this.explodeBomb(bomb);
       };
       return !exploded;
     });
+
+    // bombs explode by collision (not by time)
+    this.bombs = this.bombs.filter(bomb => {
+      let exploded = false;
+      if (bomb.collision.deadly) {
+        this.getAlivePlayers().forEach(player => {
+          const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
+          if (dist < player.radius + bomb.config.radius) {
+            if (bomb.collision.kicker !== player.id
+              && !(!this.gameRule.bomb.collision.friendlyFire && bomb.collision.kickerTeam === player.team)) {
+              this.explodeBomb(bomb);
+              this.textureStore.bombHitSound.play();
+              exploded = true;
+            }
+          }
+        });
+      }
+      return !exploded;
+    });
+  }
+
+  private explodeBomb(bomb: BombPixi) {
+    this.playExplosionSound();
+    this.createExplosion(bomb.pos);
+
+    this.getAlivePlayers().forEach(player => {
+      const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
+      if (dist < player.radius + bomb.config.explosionRadius) {
+        this.killPlayer(player);
+      }
+    });
+
+    bomb.container.destroy();
+    
+    // destroy tiles
+    this.destroyTiles(bomb.pos, bomb.config.tileDestroyRadius);
+  }
+
+  private playExplosionSound() {
+    const id = Math.floor(Math.random() * this.textureStore.explosionSounds.length);
+    this.textureStore.explosionSounds[id].stop(); 
+    this.textureStore.explosionSounds[id].play();
   }
 
   private killPlayer(player: PlayerPixi) {
@@ -312,11 +346,11 @@ export class FieldPixi {
     this.playerContainer.addChild(player.container);
     
     player.subjKick.subscribe(kickPower => {
-      this.checkKickBomb({x: player.pos.x, y: player.pos.y}, kickPower);
+      this.checkKickBomb(player.team, player.id, {x: player.pos.x, y: player.pos.y}, this.ctx.gameRule.player.kick.reach, kickPower);
     });
   }
 
-  checkKickBomb(playerPos: Pos, kickPower: number) {
+  checkKickBomb(team: number, playerId: number, playerPos: Pos, kickReach: number, kickPower: number) {
     // find bombs
     const hits = this.bombs
       .filter(bomb => bomb.time >= bomb.config.spawnTime)
@@ -326,14 +360,14 @@ export class FieldPixi {
         dy: bomb.pos.y - playerPos.y,
         dx: bomb.pos.x - playerPos.x,
       }))
-      .filter(hit => hit.dist < 50) // assuming kick range is 50
+      .filter(hit => hit.dist < kickReach) // assuming kick range is 50
     ;
 
     const power = 0.5 + 0.5 / hits.length;
     hits.forEach(hit => {
       hit.bomb.speed = kickPower;
       hit.bomb.dir = Math.atan2(hit.dy, hit.dx);
-      hit.bomb.kicked();
+      hit.bomb.kicked(playerId, team);
       
       const p = kickPower / this.gameRule.player.kick.power;
       let kickSoundIndex;

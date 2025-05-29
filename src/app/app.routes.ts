@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
+import { GameComponent } from './view/game/game.component';
 
 export const routes: Routes = [
   {
     path: 'game',
-    loadComponent: () => import('./view/game/game.component').then(m => m.GameComponent)
+    component: GameComponent,
   },
   {
     path: 'credits',

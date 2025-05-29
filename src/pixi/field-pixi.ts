@@ -28,7 +28,7 @@ export class FieldPixi {
     private gameRule: GameRule,
     private textureStore: TextureStore,
   ) {
-    this.spawnCounter = Math.max(60, this.gameRule.bombSpawnIntervalInitial / 2);
+    this.spawnCounter = Math.max(60, this.gameRule.bombSpawner.intervalInitial / 2);
     this.createExplosion({ x: 400, y: 200});
 
     this.container.sortableChildren = true; // enable sorting for z-index management
@@ -129,7 +129,7 @@ export class FieldPixi {
   updateBombSpawner() {
     if (this.ctx.displayData.timeLeft <= 0) return; // no bombs if time is up
 
-    this.spawnInterval = this.ctx.displayData.timeLeft / this.gameRule.roundTime * (this.gameRule.bombSpawnIntervalInitial - this.gameRule.bombSpawnIntervalFinal) + this.gameRule.bombSpawnIntervalFinal;
+    this.spawnInterval = this.ctx.displayData.timeLeft / this.gameRule.roundTime * (this.gameRule.bombSpawner.intervalInitial - this.gameRule.bombSpawner.intervalFinal) + this.gameRule.bombSpawner.intervalFinal;
     this.spawnCounter++;
     if (this.spawnCounter >= this.spawnInterval) {
       this.spawnCounter -= this.spawnInterval;
@@ -214,7 +214,7 @@ export class FieldPixi {
 
     // repair mechanic
     if (this.ctx.displayData.timeLeft > 0) {
-      for (const player of players.filter(p => p.repairCounter >= this.gameRule.repairTime)) {
+      for (const player of players.filter(p => p.repairCounter >= this.gameRule.player.repairTime)) {
         const repairableTiles = (playerTileCollisionMap.get(player) || [])
           .filter(tile => !tile.alive);
         if (repairableTiles.length === 0) continue;
@@ -244,7 +244,7 @@ export class FieldPixi {
       }
     });
     for (const player of unsafePlayers) {
-      if (this.gameRule.canFall) {
+      if (this.gameRule.player.canFall) {
           this.killPlayer(player);
       } else {
         player.pos.x = player.lastPos.x;
@@ -335,9 +335,9 @@ export class FieldPixi {
       hit.bomb.dir = Math.atan2(hit.dy, hit.dx);
       hit.bomb.kicked();
       
-      const p = kickPower / this.gameRule.kickPower;
+      const p = kickPower / this.gameRule.player.kick.power;
       let kickSoundIndex;
-      if (this.ctx.gameRule.kickChargeTime > 1) {
+      if (this.ctx.gameRule.player.kick.charge.time > 1) {
         kickSoundIndex = Math.min(this.ctx.textureStore.kickSounds.length - 1, Math.floor(p*p * this.ctx.textureStore.kickSounds.length));;
       } else {
         kickSoundIndex = Math.floor(Math.random() * (this.ctx.textureStore.kickSounds.length - 2)) + 1;

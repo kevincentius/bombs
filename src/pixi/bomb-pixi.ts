@@ -32,7 +32,7 @@ export class BombPixi {
   }
 
   kicked() {
-    this.time = Math.min(this.time, this.config.spawnTime + this.config.explosionDelay * (1 - this.gameRule.resetBombTimerOnKick));
+    this.time = Math.min(this.time, this.config.spawnTime + this.config.explosionDelay * (1 - this.gameRule.bomb.resetTimerOnKick));
   }
 
   update() {

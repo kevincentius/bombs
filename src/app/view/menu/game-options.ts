@@ -35,7 +35,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Fast', value: 3.5 },
     ],
     defaultIndex: 1,
-    applier: (gameRule, value) => { gameRule.playerSpeed = value; },
+    applier: (gameRule, value) => { gameRule.player.speed = value; },
     advanced: true,
   },
 
@@ -61,7 +61,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Very Fast', value: 20 },
     ],
     defaultIndex: 1,
-    applier: (gameRule, value) => { gameRule.kickCooldown = value; },
+    applier: (gameRule, value) => { gameRule.player.kick.cooldown = value; },
     advanced: true,
   },
 
@@ -75,18 +75,18 @@ export const gameOptions: GameOption[] = [
     defaultIndex: 0,
     applier: (gameRule, value) => {
       if (value === 0) {
-        gameRule.kickChargeTime = 0;
-        gameRule.kickPower = 8;
+        gameRule.player.kick.charge.time = 0;
+        gameRule.player.kick.power = 8;
       } else if (value === 1){
-        gameRule.kickChargeTime = 90;
-        gameRule.kickPower = 12;
-        gameRule.kickOverchargedIsWeaker = false;
-        gameRule.kickChargePrecisionExp = 1;
+        gameRule.player.kick.charge.time = 90;
+        gameRule.player.kick.power = 12;
+        gameRule.player.kick.charge.overchargedIsWeaker = false;
+        gameRule.player.kick.charge.precisionExp = 1;
       } else if (value === 2){
-        gameRule.kickChargeTime = 30;
-        gameRule.kickPower = 10;
-        gameRule.kickOverchargedIsWeaker = true;
-        gameRule.kickChargePrecisionExp = 3;
+        gameRule.player.kick.charge.time = 30;
+        gameRule.player.kick.power = 10;
+        gameRule.player.kick.charge.overchargedIsWeaker = true;
+        gameRule.player.kick.charge.precisionExp = 3;
       }
     },
   },
@@ -100,7 +100,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Disabled', value: 999999999 },
     ],
     defaultIndex: 1,
-    applier: (gameRule, value) => { gameRule.repairTime = value; },
+    applier: (gameRule, value) => { gameRule.player.repairTime = value; },
     advanced: true,
   },
 
@@ -112,7 +112,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Slow', value: 720 },
     ],
     defaultIndex: 1,
-    applier: (gameRule, value) => { gameRule.respawnTime = value; },
+    applier: (gameRule, value) => { gameRule.player.respawnTime = value; },
     advanced: true,
   },
 
@@ -124,7 +124,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Many', value: 30 },
     ],
     defaultIndex: 0,
-    applier: (gameRule, value) => { gameRule.bombSpawnIntervalInitial = value; },
+    applier: (gameRule, value) => { gameRule.bombSpawner.intervalInitial = value; },
     advanced: true,
   },
 
@@ -136,7 +136,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Many', value: 30 },
     ],
     defaultIndex: 2,
-    applier: (gameRule, value) => { gameRule.bombSpawnIntervalFinal = value; },
+    applier: (gameRule, value) => { gameRule.bombSpawner.intervalFinal = value; },
     advanced: true,
   },
 
@@ -160,7 +160,7 @@ export const gameOptions: GameOption[] = [
       { label: 'Yes', value: 1 },
     ],
     defaultIndex: 0,
-    applier: (gameRule, value) => { gameRule.resetBombTimerOnKick = value; },
+    applier: (gameRule, value) => { gameRule.bomb.resetTimerOnKick = value; },
     advanced: true,
   },
 

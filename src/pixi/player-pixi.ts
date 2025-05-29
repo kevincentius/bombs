@@ -37,6 +37,8 @@ export class PlayerPixi {
   chargeBarW = 16;
   chargeSoundId?: number;
 
+  get rule() { return this.ctx.gameRule.player; }
+
   constructor(
     private ctx: GameContext,
     private texture: Texture,
@@ -91,7 +93,7 @@ export class PlayerPixi {
   }
 
   die() {
-    this.respawnCounterLeft = this.ctx.gameRule.respawnTime;
+    this.respawnCounterLeft = this.rule.respawnTime;
   }
 
   isAlive(): unknown {
@@ -119,9 +121,9 @@ export class PlayerPixi {
     // kick
     if (this.isAlive() && this.kickCooldown <= 0) {
       if (this.inputHandler.isDown(this.settings.controls[InputKey.ACTION])) {
-        if (this.ctx.gameRule.kickChargeTime == 0) {
-          this.kickCooldown = this.ctx.gameRule.kickCooldown;
-          this.subjKick.next(this.ctx.gameRule.kickPower);
+        if (this.rule.kick.charge.time == 0) {
+          this.kickCooldown = this.rule.kick.cooldown;
+          this.subjKick.next(this.rule.kick.power);
         } else if (this.kickCooldown <= 0) {
           if (this.kickChargeCounter == 0) {
             this.chargeSoundId = this.ctx.textureStore.chargeSound.play();
@@ -130,8 +132,8 @@ export class PlayerPixi {
         }
       } else {
         if (this.kickChargeCounter > 0) {
-          this.kickCooldown = this.ctx.gameRule.kickCooldown;
-          this.subjKick.next(this.getKickChargeValue() * this.ctx.gameRule.kickPower);
+          this.kickCooldown = this.rule.kick.cooldown;
+          this.subjKick.next(this.getKickChargeValue() * this.rule.kick.power);
           this.kickChargeCounter = 0;
         }
       }
@@ -151,7 +153,7 @@ export class PlayerPixi {
 
     this.container.position.set(this.pos.x, this.pos.y);
 
-    const p = this.kickCooldown / this.ctx.gameRule.kickCooldown;
+    const p = this.kickCooldown / this.rule.kick.cooldown;
     this.sprite.rotation = -this.team * p*p * Math.PI * 2;
 
     if (this.kickChargeCounter <= 0) {
@@ -174,7 +176,7 @@ export class PlayerPixi {
     this.lastPos.y = this.pos.y;
     let dx = 0;
     let dy = 0;
-    const speed = this.ctx.gameRule.playerSpeed;
+    const speed = this.rule.speed;
     if (this.inputHandler.isDown(this.settings.controls[InputKey.UP])) { dy -= speed; }
     if (this.inputHandler.isDown(this.settings.controls[InputKey.DOWN])) { dy += speed; }
     if (this.inputHandler.isDown(this.settings.controls[InputKey.LEFT])) { dx -= speed; }
@@ -195,7 +197,7 @@ export class PlayerPixi {
 
   private getKickChargeValue() {
     let p = this.getKickChargeValueRaw();
-    return Math.pow(p, this.ctx.gameRule.kickChargePrecisionExp);
+    return Math.pow(p, this.rule.kick.charge.precisionExp);
   }
 
   /**
@@ -204,11 +206,11 @@ export class PlayerPixi {
   private getKickChargeValueRaw() {
     if (this.kickChargeCounter <= 0) return 0;
 
-    const max = this.ctx.gameRule.kickChargeTime;
+    const max = this.rule.kick.charge.time;
     if (this.kickChargeCounter <= max) {
       return this.kickChargeCounter / max;
     } else {
-      if (this.ctx.gameRule.kickOverchargedIsWeaker) {
+      if (this.rule.kick.charge.overchargedIsWeaker) {
         return Math.max(0.25, 2 - this.kickChargeCounter/max);
       } else {
         return 1;

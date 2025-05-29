@@ -8,20 +8,29 @@ const defaultGameRule: GameRule = {
   
   roundTime: 90,
 
-  playerSpeed: 2.5,
-  kickPower: 8,
-  kickCooldown: 60,
-  kickChargeTime: 90,
-  kickOverchargedIsWeaker: true,
-  kickChargePrecisionExp: 1,
-  repairTime: 20,
-  repairTiles: 1,
+  player: {
+    speed: 2.5,
+    kick: {
+      power: 8,
+      cooldown: 60,
+      charge: {
+        time: 90,
+        overchargedIsWeaker: true,
+        precisionExp: 1,
+      },
+    },
 
-  respawnTime: 480,
+    repairTime: 20,
+    repairTiles: 1,
 
-  bombSpawnIntervalInitial: 120,
-  bombSpawnIntervalFinal: 30,
-  resetBombTimerOnKick: 0, // 0 - 1
+    canFall: false,
+    respawnTime: 480,
+  },
+  
+  bombSpawner: {
+    intervalInitial: 120,
+    intervalFinal: 30,
+  },
 
   bomb: {
     spawnTime: 1000 / (1000 / 60),
@@ -31,6 +40,8 @@ const defaultGameRule: GameRule = {
     radius: 20,
     explosionRadius: 30,
     tileDestroyRadius: 20,
+
+    resetTimerOnKick: 0, // 0 - 1
   },
   
   tiles: {
@@ -39,7 +50,6 @@ const defaultGameRule: GameRule = {
     size: 16,
   },
   
-  canFall: false,
   fourPlayers: false,
 };
 

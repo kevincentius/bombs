@@ -16,6 +16,8 @@ export class FieldPixi {
 
   bombContainer = new Container();
   bombs: BombPixi[] = [];
+  nextBombId = 0;
+  kickGracePeriodMap = new Map<number, number>(); // player cannot kick the same bomb twice within this grace period
 
   spawnCounter = 0;
   spawnInterval = 60;
@@ -146,7 +148,7 @@ export class FieldPixi {
   private spawnBomb() {
     const x = Math.random() * 800; // assuming field width is 800
     const y = Math.random() * 400; // assuming field height is 400
-    const bomb = this.ctx.newBomb({ x, y });
+    const bomb = this.ctx.newBomb({ x, y }, this.nextBombId++);
     this.bombs.push(bomb);
     this.bombContainer.addChild(bomb.container);
     
@@ -154,6 +156,29 @@ export class FieldPixi {
   }
 
   updateBombs() {
+    // check if player kicks bombs
+    for (const player of this.getAlivePlayers().filter(p => p.kickDurationLeft > 0)) {
+      for (const bomb of this.bombs) {
+        const id = player.id * 999_999_999_999_999 + bomb.id; // unique id for player-bomb pair
+
+        // grace period to avoid double kicks
+        const gracePeriod = this.kickGracePeriodMap.get(id);
+        if (gracePeriod == null) {
+          this.checkKickBomb(player.team, player.id, player.pos, player.rule.kick.reach, player.kickPower);
+          this.kickGracePeriodMap.set(id, this.gameRule.bomb.collision.gracePeriod);
+        }
+      }
+    }
+
+    // update grace periods for kicks
+    this.kickGracePeriodMap.forEach((value, key) => {
+      if (value > 0) {
+        this.kickGracePeriodMap.set(key, value - 1);
+      } else {
+        this.kickGracePeriodMap.delete(key);
+      }
+    });
+
     // update bombs while deleting the ones that have exploded
     this.bombs = this.bombs.filter(bomb => {
       const exploded = bomb.update();
@@ -167,7 +192,7 @@ export class FieldPixi {
     this.bombs = this.bombs.filter(bomb => {
       let exploded = false;
       if (bomb.collision.deadly) {
-        this.getAlivePlayers().forEach(player => {
+        this.getAlivePlayers().filter(p => p.kickDurationLeft <= 0).forEach(player => {
           const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
           if (dist < player.rule.radius + bomb.config.radius) {
             if (bomb.collision.kicker !== player.id
@@ -344,10 +369,6 @@ export class FieldPixi {
   addPlayer(player: PlayerPixi) {
     this.players.push(player);
     this.playerContainer.addChild(player.container);
-    
-    player.subjKick.subscribe(kickPower => {
-      this.checkKickBomb(player.team, player.id, {x: player.pos.x, y: player.pos.y}, this.ctx.gameRule.player.kick.reach, kickPower);
-    });
   }
 
   checkKickBomb(team: number, playerId: number, playerPos: Pos, kickReach: number, kickPower: number) {
@@ -388,9 +409,5 @@ export class FieldPixi {
       // hit.bomb.speed = Math.hypot(vel.x, vel.y);
       // hit.bomb.dir = Math.atan2(vel.y, vel.x);
     });
-
-    if (hits.length == 0) {
-      this.ctx.textureStore.missSound.play();
-    }
   }
 }

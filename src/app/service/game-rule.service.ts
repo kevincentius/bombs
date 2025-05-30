@@ -16,6 +16,7 @@ const defaultGameRule: GameRule = {
 
     kick: {
       reach: 50,
+      duration: 15,
       power: 8,
       powerMult: 1,
       cooldown: 60,
@@ -52,7 +53,7 @@ const defaultGameRule: GameRule = {
     collision: {
       speedToKillPlayers: 4, // if the bomb moves at this speed, it can kill players
       friendlyFire: true, // if true, players can kick bombs into each other
-      gracePeriod: 10,
+      gracePeriod: 15,
     },
 
     animation: {

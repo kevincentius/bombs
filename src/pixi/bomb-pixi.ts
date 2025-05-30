@@ -34,6 +34,7 @@ export class BombPixi {
     private textureStore: TextureStore,
     private gameRule: GameRule,
     spawnPos: Pos,
+    public id: number,
   ) {
     const spriteScale = this.gameRule.bomb.radius * 2 / this.textureStore.bomb.width;
     this.sprite = new Sprite({

@@ -13,6 +13,7 @@ export interface GameRule {
 
     kick: {
       reach: number;
+      duration: number;
       power: number;
       powerMult: number;
       cooldown: number;

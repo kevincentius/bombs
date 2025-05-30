@@ -52,7 +52,7 @@ export class GameContext {
   newGame() { return new GamePixi(this, this.textureStore); }
   newField() { return new FieldPixi(this, this.gameRule, this.textureStore); }
   newPlayer(texture: Texture, boundary: PlayerBoundary, settings: PlayerSettings, team: number, id: number) { return new PlayerPixi(this, texture, this.inputHandler, boundary, settings, team, id); }
-  newBomb(pos: Pos) { return new BombPixi(this.textureStore, this.gameRule, pos ); }
+  newBomb(pos: Pos, id: number) { return new BombPixi(this.textureStore, this.gameRule, pos, id ); }
 
   destroy() {
     this.appPixi.app.stop();

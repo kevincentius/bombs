@@ -3,7 +3,6 @@ import { GameContext } from "../game/game-context";
 import { PlayerSettings } from "../game/player-settings";
 import { InputHandler } from "../game/input-handler";
 import { InputKey } from "../game/types";
-import { Subject } from "rxjs";
 
 export interface PlayerBoundary {
   xMin: number;
@@ -27,8 +26,10 @@ export class PlayerPixi {
   repairCounter = 0;
   respawnCounterLeft = 0;
 
-  subjKick = new Subject<number>(); // kick strength
-
+  // current kick
+  kickDurationLeft = 0;
+  kickPower = 0;
+ 
   kickChargeCounter = 0;
   
   chargeBarContainer = new Container();
@@ -130,11 +131,14 @@ export class PlayerPixi {
     this.handleMovement();
 
     // kick
+    this.kickDurationLeft = Math.max(0, this.kickDurationLeft - 1);
     if (this.isAlive() && this.kickCooldown <= 0) {
       if (this.inputHandler.isDown(this.settings.controls[InputKey.ACTION])) {
         if (this.rule.kick.charge.time == 0) {
           this.kickCooldown = this.rule.kick.cooldown;
-          this.subjKick.next(this.rule.kick.power * this.rule.kick.powerMult);
+          this.kickDurationLeft = this.rule.kick.duration;
+          this.kickPower = this.rule.kick.power * this.rule.kick.powerMult;
+          this.ctx.textureStore.missSound.play();
         } else if (this.kickCooldown <= 0) {
           if (this.kickChargeCounter == 0) {
             this.chargeSoundId = this.ctx.textureStore.chargeSound.play();
@@ -144,8 +148,10 @@ export class PlayerPixi {
       } else {
         if (this.kickChargeCounter > 0) {
           this.kickCooldown = this.rule.kick.cooldown;
-          this.subjKick.next(this.getKickChargeValue() * this.rule.kick.power * this.rule.kick.powerMult);
+          this.kickDurationLeft = this.rule.kick.duration;
+          this.kickPower = this.getKickChargeValue() * this.rule.kick.power * this.rule.kick.powerMult;
           this.kickChargeCounter = 0;
+          this.ctx.textureStore.missSound.play();
         }
       }
     } else {

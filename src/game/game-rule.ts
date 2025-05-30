@@ -8,6 +8,9 @@ export interface GameRule {
   player: {
     speed: number;
     
+    radius: number;
+    groundRadius: number;
+
     kick: {
       reach: number;
       power: number;

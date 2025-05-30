@@ -24,8 +24,6 @@ export class PlayerPixi {
   lastPos = {x: 0, y: 0};
   kickCooldown = 0;
 
-  radius = 20;
-
   repairCounter = 0;
   respawnCounterLeft = 0;
 
@@ -36,6 +34,8 @@ export class PlayerPixi {
   chargeBarContainer = new Container();
   chargeBarW = 16;
   chargeSoundId?: number;
+
+  reachCircle = new Graphics();
 
   get rule() { return this.ctx.gameRule.player; }
 
@@ -56,9 +56,12 @@ export class PlayerPixi {
     this.pos.y = (this.boundary.yMin + this.boundary.yMax) / 2;
 
     this.container.addChild(this.sprite);
-    this.sprite.scale.set(2.4, 2.4);
+
+    const scale = this.rule.radius * 2 / ((this.texture.width + this.texture.height) / 2);
+    this.sprite.scale.set(scale, scale);
 
     this.createChargeBar();
+    this.createReachCircle();
   }
 
   private createChargeBar() {
@@ -74,7 +77,7 @@ export class PlayerPixi {
     const w = this.chargeBarW;
     const h = 4;
     const x = -w / 2;
-    const y = -this.radius - h / 2 - 2;
+    const y = -this.rule.radius - 6 - h / 2 - 2;
     this.chargeBar.width = w;
     this.chargeBar.height = h;
     this.chargeBarFill.width = w;
@@ -91,6 +94,13 @@ export class PlayerPixi {
     this.chargeBarContainer.addChild(this.chargeBarFill);
 
     this.container.addChild(this.chargeBarContainer);
+  }
+
+  private createReachCircle() {
+    this.reachCircle.circle(0, 0, this.rule.kick.reach);
+    this.reachCircle.stroke({ width: 1, color: 0xffffff, alpha: 0.15 });
+    
+    this.container.addChild(this.reachCircle);
   }
 
   die() {
@@ -192,8 +202,8 @@ export class PlayerPixi {
     let isMoving = (dx !== 0 || dy !== 0);
 
     // clamp
-    this.pos.x = Math.max(this.boundary.xMin + this.radius, Math.min(this.boundary.xMax - this.radius, this.pos.x + dx));
-    this.pos.y = Math.max(this.boundary.yMin + this.radius, Math.min(this.boundary.yMax - this.radius, this.pos.y + dy));
+    this.pos.x = Math.max(this.boundary.xMin + this.rule.radius, Math.min(this.boundary.xMax - this.rule.radius, this.pos.x + dx));
+    this.pos.y = Math.max(this.boundary.yMin + this.rule.radius, Math.min(this.boundary.yMax - this.rule.radius, this.pos.y + dy));
     return isMoving;
   }
 

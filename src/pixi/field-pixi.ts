@@ -35,8 +35,8 @@ export class FieldPixi {
     
     this.container.addChild(this.tileContainer);
     this.createPlayers();
-    this.container.addChild(this.playerContainer);
     this.container.addChild(this.bombContainer);
+    this.container.addChild(this.playerContainer);
 
     this.tiles = Array.from({ length: this.gameRule.tiles.rows }, () => []);
     for (let i = 0; i < this.gameRule.tiles.rows; i++) {
@@ -58,7 +58,7 @@ export class FieldPixi {
     const boundaryLeft = { xMin: 0, xMax: 400 + extraBound, yMin: 0, yMax: 400 };
     const boundaryRight = { xMin: 400 - extraBound, xMax: 800, yMin: 0, yMax: 400 };
 
-    const p1Settings: PlayerSettings = {
+    const p3Settings: PlayerSettings = {
       controls: {
         DOWN: 's',
         UP: 'w',
@@ -78,13 +78,13 @@ export class FieldPixi {
       }
     };
 
-    const p3Settings: PlayerSettings = {
+    const p1Settings: PlayerSettings = {
       controls: {
         DOWN: 'k',
         UP: 'i',
         LEFT: 'j',
         RIGHT: 'l',
-        ACTION: ' ',
+        ACTION: 'h',
       }
     };
     
@@ -169,7 +169,7 @@ export class FieldPixi {
       if (bomb.collision.deadly) {
         this.getAlivePlayers().forEach(player => {
           const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
-          if (dist < player.radius + bomb.config.radius) {
+          if (dist < player.rule.radius + bomb.config.radius) {
             if (bomb.collision.kicker !== player.id
               && !(!this.gameRule.bomb.collision.friendlyFire && bomb.collision.kickerTeam === player.team)) {
               this.explodeBomb(bomb);
@@ -189,7 +189,7 @@ export class FieldPixi {
 
     this.getAlivePlayers().forEach(player => {
       const dist = Math.hypot(player.pos.x - bomb.pos.x, player.pos.y - bomb.pos.y);
-      if (dist < player.radius + bomb.config.explosionRadius) {
+      if (dist < player.rule.radius + bomb.config.explosionRadius) {
         this.killPlayer(player);
       }
     });
@@ -238,7 +238,7 @@ export class FieldPixi {
 
     const playerTileCollisionMap = new Map<PlayerPixi, TilePixi[]>();
     this.tiles.flat().forEach(tile => {
-      const hitPlayers = players.filter(player => Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y) < player.radius + this.gameRule.tiles.size / 2);
+      const hitPlayers = players.filter(player => Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y) < player.rule.groundRadius + this.gameRule.tiles.size / 2);
       hitPlayers.forEach(player => {
         playerTileCollisionMap.set(player, playerTileCollisionMap.get(player) || []);
         playerTileCollisionMap.get(player)!.push(tile);
@@ -299,7 +299,7 @@ export class FieldPixi {
           if (!player.isAlive()) return;
 
           const dist = Math.hypot(player.pos.x - tile.pos.x, player.pos.y - tile.pos.y);
-          if (dist < player.radius + this.gameRule.tiles.size / 2) {
+          if (dist < player.rule.groundRadius + this.gameRule.tiles.size / 2) {
             hitMap.set(player, hitMap.get(player) || []);
             hitMap.get(player)!.push(tile);
           }
@@ -360,7 +360,7 @@ export class FieldPixi {
         dy: bomb.pos.y - playerPos.y,
         dx: bomb.pos.x - playerPos.x,
       }))
-      .filter(hit => hit.dist < kickReach) // assuming kick range is 50
+      .filter(hit => hit.dist < kickReach + this.gameRule.bomb.radius)
     ;
 
     const power = 0.5 + 0.5 / hits.length;

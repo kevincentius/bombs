@@ -10,8 +10,12 @@ const defaultGameRule: GameRule = {
 
   player: {
     speed: 2.5,
+
+    radius: 20,
+    groundRadius: 20,
+
     kick: {
-      reach: 60,
+      reach: 50,
       power: 8,
       powerMult: 1,
       cooldown: 60,
@@ -39,7 +43,7 @@ const defaultGameRule: GameRule = {
     explosionDelay: 4000 / (1000 / 60),
     vMult: 0.99,
     vDeccel: 0.01,
-    radius: 16,
+    radius: 20,
     explosionRadius: 30,
     tileDestroyRadius: 20,
 

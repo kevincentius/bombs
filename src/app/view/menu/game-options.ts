@@ -53,19 +53,6 @@ export const gameOptions: GameOption[] = [
   },
 
   {
-    caption: 'Kick cooldown',
-    values: [
-      { label: 'Slow', value: 90 },
-      { label: 'Normal', value: 60 },
-      { label: 'Fast', value: 40 },
-      { label: 'Very Fast', value: 20 },
-    ],
-    defaultIndex: 1,
-    applier: (gameRule, value) => { gameRule.player.kick.cooldown = value; },
-    advanced: true,
-  },
-
-  {
     caption: 'Kick type',
     values: [
       { label: 'Simple', value: 0 },
@@ -75,15 +62,18 @@ export const gameOptions: GameOption[] = [
     defaultIndex: 0,
     applier: (gameRule, value) => {
       if (value === 0) {
+        gameRule.player.kick.cooldown = 60;
         gameRule.player.kick.charge.time = 0;
         gameRule.player.kick.power = 8;
       } else if (value === 1){
+        gameRule.player.kick.cooldown = 1;
         gameRule.player.kick.charge.time = 90;
         gameRule.player.kick.power = 12;
         gameRule.player.kick.charge.overchargedIsWeaker = false;
         gameRule.player.kick.charge.precisionExp = 1;
       } else if (value === 2){
-        gameRule.player.kick.charge.time = 30;
+        gameRule.player.kick.cooldown = 1;
+        gameRule.player.kick.charge.time = 60;
         gameRule.player.kick.power = 10;
         gameRule.player.kick.charge.overchargedIsWeaker = true;
         gameRule.player.kick.charge.precisionExp = 5;

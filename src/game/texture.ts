@@ -18,7 +18,7 @@ export class TextureStore {
   roundStartSound = new Howl({ src: ['round-start.mp3'] });
   roundEndSound = new Howl({ src: ['round-end.mp3'] });
   repairSound = new Howl({ src: ['repair.mp3'] });
-  chargeSound = new Howl({ src: ['charge.mp3'] });
+  chargeSound = new Howl({ src: ['charge.mp3'], volume: 0.4 });
   playerDieSound = new Howl({ src: ['player-die.mp3'] });
   missSound = new Howl({ src: ['miss.mp3'] });
   bombHitSound = new Howl({ src: ['hit.mp3'], volume: 1 });

@@ -53,7 +53,7 @@ const defaultGameRule: GameRule = {
     collision: {
       speedToKillPlayers: 4, // if the bomb moves at this speed, it can kill players
       friendlyFire: true, // if true, players can kick bombs into each other
-      gracePeriod: 15,
+      gracePeriod: 16,
     },
 
     animation: {

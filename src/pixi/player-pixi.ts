@@ -27,6 +27,8 @@ export class PlayerPixi {
   respawnCounterLeft = 0;
 
   // current kick
+  kickAnimationLeft = 0;
+  kickAnimationDuration = 25; // minimum animation frames (otherwise it depends on cooldown)
   kickDurationLeft = 0;
   kickPower = 0;
  
@@ -137,6 +139,7 @@ export class PlayerPixi {
         if (this.rule.kick.charge.time == 0) {
           this.kickCooldown = this.rule.kick.cooldown;
           this.kickDurationLeft = this.rule.kick.duration;
+          this.kickAnimationLeft = this.kickAnimationDuration;
           this.kickPower = this.rule.kick.power * this.rule.kick.powerMult;
           this.ctx.textureStore.missSound.play();
         } else if (this.kickCooldown <= 0) {
@@ -149,6 +152,7 @@ export class PlayerPixi {
         if (this.kickChargeCounter > 0) {
           this.kickCooldown = this.rule.kick.cooldown;
           this.kickDurationLeft = this.rule.kick.duration;
+          this.kickAnimationLeft = this.kickAnimationDuration;
           this.kickPower = this.getKickChargeValue() * this.rule.kick.power * this.rule.kick.powerMult;
           this.kickChargeCounter = 0;
           this.ctx.textureStore.missSound.play();
@@ -160,10 +164,12 @@ export class PlayerPixi {
 
     // kick cooldown
     this.kickCooldown = Math.max(0, this.kickCooldown - 1);
+    this.kickAnimationLeft = Math.max(0, this.kickAnimationLeft - 1);
 
     this.container.position.set(this.pos.x, this.pos.y);
 
-    const p = this.kickCooldown / this.rule.kick.cooldown;
+    // const p = this.kickCooldown / this.rule.kick.cooldown;
+    const p = this.kickAnimationLeft / this.kickAnimationDuration;
     this.sprite.rotation = -this.team * p*p * Math.PI * 2;
 
     if (this.kickChargeCounter <= 0) {
